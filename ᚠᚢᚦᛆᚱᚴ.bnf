@@ -1,0 +1,7 @@
+<statement> ::= <assignment> | <expression> ;
+<assignment> ::= <identifier> "᛬᛬" <expression> ;
+<expression> ::= <term> | <expression> " ᛭ " <term> ; /* Runic, not ASCII + */
+<term> ::= <identifier> | <number> ;
+<identifier> ::= <rune>+ ;
+<number> ::= ᛫[ᚠᚡᚢᚣᚤᚥᚦᚧᚨᚩᚪᚫᚬᚭᚮᚯ]+᛫ ; /* These specific runes, corresponding to hexadecimal 0-F */
+<rune> ::= [\u16A0-\u16F8] ;  /* Runic Unicode code block */
