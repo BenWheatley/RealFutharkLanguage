@@ -1,7 +1,39 @@
-<statement> ::= <assignment> | <expression> ;
+<program> ::= <statement>* ;
+
+<statement> ::= <assignment> 
+              | <expression> 
+              | <if-statement>
+              | <while-loop> 
+              ;
+
 <assignment> ::= <identifier> "᛬᛬" <expression> ;
-<expression> ::= <term> | <expression> " ᛭ " <term> ; /* Runic, not ASCII + */
+
+<expression> ::= <term> 
+               | <expression> " ᛈᛚᛊ " <term>  /* Runic + */
+               | <expression> " ᛗᚾᚢᛊ " <term>  /* Runic - */
+               | <expression> " ᛊᛁᚾᚾᚢᛗ " <term>  /* Runic * */
+               | <expression> " ᛞᛖᛁᛚᛏ᛬ᛗᛖᚦ " <term>  /* Runic / */
+               | "[" <expression> "]"  /* Grouping via angle brackets instead of parenthesis */
+               ;
+
 <term> ::= <identifier> | <number> ;
+
+<if-statement> ::= "ᛖᚠ" <condition> "᛬" <statement>* ("ᚨᚾᚾᚨᚦ" "᛬" <statement>*)? "ᛖᚾᛞᚨ" ;
+
+<while-loop> ::= "ᚹᚢᛁᛚᛖ" <condition> "᛬" <statement>* "ᛖᚾᛞᚨ" ;
+
+<condition> ::= <expression> <comparison-operator> <expression> ;
+
+<comparison-operator> ::= "ᛖᚱ᛬ᛃöᚠᚾ"  /* Runic == */
+                         | "ᛖᚱ᛬óᛃöᚠᚾ᛬ᚹᛁᚦ"  /* Runic != */
+                         | "ᛗᛖᛁᚱᛁ᛬ᛖᚾ"  /* Runic > */
+                         | "ᛗᛁᚾᚾᚨ᛬ᛖᚾ"  /* Runic < */
+                         | "ᛊᛏᛇᚱᚱᚨ᛬ᛖᚾ᛬ᛖᚦᚨ᛬ᛃᚨᚠᚾᛏ᛬ᛟᚷ" /* Runic >= */
+                         | "ᛗᛁᚾᚾᚨ᛬ᛖᚾ᛬ᛖᚦᚨ᛬ᛃᚨᚠᚾᛏ᛬ᛟᚷ" /* Runic <= */
+                         ;
+
 <identifier> ::= <rune>+ ;
+
 <number> ::= ᛫[ᚠᚡᚢᚣᚤᚥᚦᚧᚨᚩᚪᚫᚬᚭᚮᚯ]+᛫ ; /* These specific runes, corresponding to hexadecimal 0-F */
+
 <rune> ::= [\u16A0-\u16F8] ;  /* Runic Unicode code block */
