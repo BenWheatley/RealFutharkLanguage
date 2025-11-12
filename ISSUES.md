@@ -33,10 +33,11 @@ This is an April Fool's joke programming language that uses Futhark runes (Old N
    - ~~Fix: Proper handling of wide characters throughout the codebase~~
    - **FIXED:** Changed all `wchar_t*` to `char*` for UTF-8 handling. Updated `rune_to_number()` to work with UTF-8 byte sequences instead of wide characters. Now uses `strdup(yytext)` instead of `wcsdup()`. Compiles cleanly with no warnings.
 
-3. **Missing Build System**
-   - Issue: No Makefile or build script
-   - Impact: Manual compilation is error-prone and inconsistent
-   - Fix: Create Makefile with proper flex/bison targets
+3. ✓ ~~**Missing Build System**~~
+   - ~~Issue: No Makefile or build script~~
+   - ~~Impact: Manual compilation is error-prone and inconsistent~~
+   - ~~Fix: Create Makefile with proper flex/bison targets~~
+   - **FIXED:** Created comprehensive Makefile with targets for `all` (build), `clean`, `rebuild`, `install`, and `help`. Properly handles flex/bison code generation, compilation with warnings enabled (-Wall -Wextra), and linking. Includes dependency tracking so only modified files are rebuilt.
 
 ### Unicode and Character Encoding Issues
 
