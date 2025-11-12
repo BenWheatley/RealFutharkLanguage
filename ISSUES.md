@@ -64,11 +64,12 @@ This is an April Fool's joke programming language that uses Futhark runes (Old N
    - ~~Fix: Implement symbol table (hash map) to store variable assignments~~
    - **FIXED:** Implemented linked-list symbol table with `store_variable()` and `lookup()` functions. Variables can now be stored, retrieved, and reassigned. Undefined variables return 0 with error message. Added `program` rule to parser to accept multiple statements. Tested successfully with multiple variables and expressions.
 
-7. **Incomplete Arithmetic Operations**
-   - Files: `ᚠᚢᚦᛆᚱᚴ.lex` and `ᚠᚢᚦᛆᚱᚴ.y`
-   - Issue: Only addition is implemented, missing subtraction, multiplication, division
-   - Impact: BNF spec promises full arithmetic but only + works
-   - Fix: Add tokens and grammar rules for -, *, / operators
+7. ✓ ~~**Incomplete Arithmetic Operations (Minus/Multiply)**~~
+   - ~~Files: `ᚠᚢᚦᛆᚱᚴ.lex` and `ᚠᚢᚦᛆᚱᚴ.y`~~
+   - ~~Issue: Only addition is implemented, missing subtraction, multiplication, division~~
+   - ~~Impact: BNF spec promises full arithmetic but only + works~~
+   - ~~Fix: Add tokens and grammar rules for -, *, / operators~~
+   - **FIXED (partial):** Added `ᛗᚾᚢᛊ` (minus) and `ᛊᛁᚾᚾᚢᛗ` (multiply) operators. Restructured grammar with proper precedence: expression (+ -), term (* /), factor (atoms). Multiplication has higher precedence than addition. Brackets override precedence. Division operator still pending (separate task). All tests pass with correct precedence.
 
 8. ✓ ~~**No Expression Grouping**~~
    - ~~Files: `ᚠᚢᚦᛆᚱᚴ.lex` and `ᚠᚢᚦᛆᚱᚴ.y`~~

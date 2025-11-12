@@ -22,6 +22,10 @@ int rune_to_number(const char *s);
 
 "᛭"            { return PLUS; } /* Matches the "plus" symbol */
 
+"ᛗᚾᚢᛊ"        { return MINUS; } /* Matches the "minus" operator (mnus) */
+
+"ᛊᛁᚾᚾᚢᛗ"      { return MULTIPLY; } /* Matches the "multiply" operator (sinnum) */
+
 "["            { return LBRACKET; } /* Left bracket for grouping */
 
 "]"            { return RBRACKET; } /* Right bracket for grouping */
