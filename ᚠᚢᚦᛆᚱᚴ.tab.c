@@ -88,11 +88,23 @@
 #include <stdlib.h>
 #include <string.h>
 
+// Symbol table entry structure
+typedef struct symbol {
+    char *name;
+    int value;
+    struct symbol *next;
+} Symbol;
+
+// Global symbol table (linked list)
+Symbol *symbol_table = NULL;
+
 // Declare yylex and yyerror
 int yylex(void);
 void yyerror(const char *s);
 
-int lookup(const char *s); // Stub for identifier lookup
+// Symbol table functions
+void store_variable(const char *name, int value);
+int lookup(const char *name);
 int rune_to_number(const char *s); // Converts a Futhark rune sequence to a number
 
 
@@ -116,13 +128,13 @@ int rune_to_number(const char *s); // Converts a Futhark rune sequence to a numb
 
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 typedef union YYSTYPE
-#line 15 "ᚠᚢᚦᛆᚱᚴ.y"
+#line 27 "ᚠᚢᚦᛆᚱᚴ.y"
 {
     int num;       // Integer values for numbers
     char *id;     // String values for identifiers
 }
 /* Line 193 of yacc.c.  */
-#line 126 "ᚠᚢᚦᛆᚱᚴ.tab.c"
+#line 138 "ᚠᚢᚦᛆᚱᚴ.tab.c"
 	YYSTYPE;
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
 # define YYSTYPE_IS_DECLARED 1
@@ -135,7 +147,7 @@ typedef union YYSTYPE
 
 
 /* Line 216 of yacc.c.  */
-#line 139 "ᚠᚢᚦᛆᚱᚴ.tab.c"
+#line 151 "ᚠᚢᚦᛆᚱᚴ.tab.c"
 
 #ifdef short
 # undef short
@@ -348,18 +360,18 @@ union yyalloc
 #endif
 
 /* YYFINAL -- State number of the termination state.  */
-#define YYFINAL  8
+#define YYFINAL  2
 /* YYLAST -- Last index in YYTABLE.  */
-#define YYLAST   12
+#define YYLAST   11
 
 /* YYNTOKENS -- Number of terminals.  */
 #define YYNTOKENS  7
 /* YYNNTS -- Number of nonterminals.  */
-#define YYNNTS  5
+#define YYNNTS  6
 /* YYNRULES -- Number of rules.  */
-#define YYNRULES  8
+#define YYNRULES  10
 /* YYNRULES -- Number of states.  */
-#define YYNSTATES  13
+#define YYNSTATES  14
 
 /* YYTRANSLATE(YYLEX) -- Bison symbol number corresponding to YYLEX.  */
 #define YYUNDEFTOK  2
@@ -405,21 +417,23 @@ static const yytype_uint8 yytranslate[] =
    YYRHS.  */
 static const yytype_uint8 yyprhs[] =
 {
-       0,     0,     3,     5,     7,    11,    13,    17,    19
+       0,     0,     3,     4,     7,     9,    11,    15,    17,    21,
+      23
 };
 
 /* YYRHS -- A `-1'-separated list of the rules' RHS.  */
 static const yytype_int8 yyrhs[] =
 {
-       8,     0,    -1,     9,    -1,    10,    -1,     3,     5,    10,
-      -1,    11,    -1,    10,     6,    11,    -1,     3,    -1,     4,
-      -1
+       8,     0,    -1,    -1,     8,     9,    -1,    10,    -1,    11,
+      -1,     3,     5,    11,    -1,    12,    -1,    11,     6,    12,
+      -1,     3,    -1,     4,    -1
 };
 
 /* YYRLINE[YYN] -- source line where rule number YYN was defined.  */
 static const yytype_uint8 yyrline[] =
 {
-       0,    30,    30,    31,    35,    39,    40,    44,    45
+       0,    41,    41,    43,    47,    48,    52,    61,    62,    66,
+      67
 };
 #endif
 
@@ -429,7 +443,7 @@ static const yytype_uint8 yyrline[] =
 static const char *const yytname[] =
 {
   "$end", "error", "$undefined", "IDENTIFIER", "NUMBER", "EQUAL", "PLUS",
-  "$accept", "statement", "assignment", "expression", "term", 0
+  "$accept", "program", "statement", "assignment", "expression", "term", 0
 };
 #endif
 
@@ -445,13 +459,15 @@ static const yytype_uint16 yytoknum[] =
 /* YYR1[YYN] -- Symbol number of symbol that rule YYN derives.  */
 static const yytype_uint8 yyr1[] =
 {
-       0,     7,     8,     8,     9,    10,    10,    11,    11
+       0,     7,     8,     8,     9,     9,    10,    11,    11,    12,
+      12
 };
 
 /* YYR2[YYN] -- Number of symbols composing right hand side of rule YYN.  */
 static const yytype_uint8 yyr2[] =
 {
-       0,     2,     1,     1,     3,     1,     3,     1,     1
+       0,     2,     0,     2,     1,     1,     3,     1,     3,     1,
+       1
 };
 
 /* YYDEFACT[STATE-NAME] -- Default rule to reduce with in state
@@ -459,14 +475,14 @@ static const yytype_uint8 yyr2[] =
    means the default is an error.  */
 static const yytype_uint8 yydefact[] =
 {
-       0,     7,     8,     0,     2,     3,     5,     0,     1,     0,
-       7,     4,     6
+       2,     0,     1,     9,    10,     3,     4,     5,     7,     0,
+       0,     9,     6,     8
 };
 
 /* YYDEFGOTO[NTERM-NUM].  */
 static const yytype_int8 yydefgoto[] =
 {
-      -1,     3,     4,     5,     6
+      -1,     1,     5,     6,     7,     8
 };
 
 /* YYPACT[STATE-NUM] -- Index in YYTABLE of the portion describing
@@ -474,14 +490,14 @@ static const yytype_int8 yydefgoto[] =
 #define YYPACT_NINF -4
 static const yytype_int8 yypact[] =
 {
-      -3,     0,    -4,     4,    -4,     1,    -4,    -1,    -4,    -1,
-      -4,     1,    -4
+      -4,     0,    -4,     1,    -4,    -4,    -4,    -1,    -4,    -2,
+      -2,    -4,    -1,    -4
 };
 
 /* YYPGOTO[NTERM-NUM].  */
 static const yytype_int8 yypgoto[] =
 {
-      -4,    -4,    -4,     2,     3
+      -4,    -4,    -4,    -4,     2,    -3
 };
 
 /* YYTABLE[YYPACT[STATE-NUM]].  What to do in state STATE-NUM.  If
@@ -491,22 +507,22 @@ static const yytype_int8 yypgoto[] =
 #define YYTABLE_NINF -1
 static const yytype_uint8 yytable[] =
 {
-       1,     2,    10,     2,     8,     7,     0,     9,     0,    11,
-       0,     0,    12
+       2,    11,     4,     3,     4,    10,     9,    13,     0,     0,
+       0,    12
 };
 
 static const yytype_int8 yycheck[] =
 {
-       3,     4,     3,     4,     0,     5,    -1,     6,    -1,     7,
-      -1,    -1,     9
+       0,     3,     4,     3,     4,     6,     5,    10,    -1,    -1,
+      -1,     9
 };
 
 /* YYSTOS[STATE-NUM] -- The (internal number of the) accessing
    symbol of state STATE-NUM.  */
 static const yytype_uint8 yystos[] =
 {
-       0,     3,     4,     8,     9,    10,    11,     5,     0,     6,
-       3,    10,    11
+       0,     8,     0,     3,     4,     9,    10,    11,    12,     5,
+       6,     3,    11,    12
 };
 
 #define yyerrok		(yyerrstatus = 0)
@@ -1320,39 +1336,44 @@ yyreduce:
   YY_REDUCE_PRINT (yyn);
   switch (yyn)
     {
-        case 3:
-#line 31 "ᚠᚢᚦᛆᚱᚴ.y"
+        case 5:
+#line 48 "ᚠᚢᚦᛆᚱᚴ.y"
     { printf("Result: %d\n", (yyvsp[(1) - (1)].num)); ;}
     break;
 
-  case 4:
-#line 35 "ᚠᚢᚦᛆᚱᚴ.y"
-    { printf("Assignment: %s = %d\n", (yyvsp[(1) - (3)].id), (yyvsp[(3) - (3)].num)); free((yyvsp[(1) - (3)].id)); ;}
-    break;
-
-  case 5:
-#line 39 "ᚠᚢᚦᛆᚱᚴ.y"
-    { (yyval.num) = (yyvsp[(1) - (1)].num); ;}
-    break;
-
   case 6:
-#line 40 "ᚠᚢᚦᛆᚱᚴ.y"
-    { (yyval.num) = (yyvsp[(1) - (3)].num) + (yyvsp[(3) - (3)].num); ;}
+#line 52 "ᚠᚢᚦᛆᚱᚴ.y"
+    {
+        store_variable((yyvsp[(1) - (3)].id), (yyvsp[(3) - (3)].num));
+        printf("Assignment: %s = %d\n", (yyvsp[(1) - (3)].id), (yyvsp[(3) - (3)].num));
+        free((yyvsp[(1) - (3)].id));
+        (yyval.num) = (yyvsp[(3) - (3)].num);
+    ;}
     break;
 
   case 7:
-#line 44 "ᚠᚢᚦᛆᚱᚴ.y"
-    { (yyval.num) = lookup((yyvsp[(1) - (1)].id)); free((yyvsp[(1) - (1)].id)); ;}
+#line 61 "ᚠᚢᚦᛆᚱᚴ.y"
+    { (yyval.num) = (yyvsp[(1) - (1)].num); ;}
     break;
 
   case 8:
-#line 45 "ᚠᚢᚦᛆᚱᚴ.y"
+#line 62 "ᚠᚢᚦᛆᚱᚴ.y"
+    { (yyval.num) = (yyvsp[(1) - (3)].num) + (yyvsp[(3) - (3)].num); ;}
+    break;
+
+  case 9:
+#line 66 "ᚠᚢᚦᛆᚱᚴ.y"
+    { (yyval.num) = lookup((yyvsp[(1) - (1)].id)); free((yyvsp[(1) - (1)].id)); ;}
+    break;
+
+  case 10:
+#line 67 "ᚠᚢᚦᛆᚱᚴ.y"
     { (yyval.num) = (yyvsp[(1) - (1)].num); ;}
     break;
 
 
 /* Line 1267 of yacc.c.  */
-#line 1356 "ᚠᚢᚦᛆᚱᚴ.tab.c"
+#line 1377 "ᚠᚢᚦᛆᚱᚴ.tab.c"
       default: break;
     }
   YY_SYMBOL_PRINT ("-> $$ =", yyr1[yyn], &yyval, &yyloc);
@@ -1566,7 +1587,7 @@ yyreturn:
 }
 
 
-#line 48 "ᚠᚢᚦᛆᚱᚴ.y"
+#line 70 "ᚠᚢᚦᛆᚱᚴ.y"
 
 
 int main(void) {
@@ -1577,7 +1598,46 @@ void yyerror(const char *s) {
     fprintf(stderr, "Error: %s\n", s);
 }
 
-int lookup(const char *s) {
-    return 42; // Placeholder
+/* Store a variable in the symbol table */
+void store_variable(const char *name, int value) {
+    Symbol *sym = symbol_table;
+
+    // Search for existing variable
+    while (sym != NULL) {
+        if (strcmp(sym->name, name) == 0) {
+            // Variable exists, update value
+            sym->value = value;
+            return;
+        }
+        sym = sym->next;
+    }
+
+    // Variable doesn't exist, create new entry
+    sym = (Symbol *)malloc(sizeof(Symbol));
+    if (sym == NULL) {
+        fprintf(stderr, "Error: Out of memory\n");
+        exit(1);
+    }
+
+    sym->name = strdup(name);
+    sym->value = value;
+    sym->next = symbol_table;
+    symbol_table = sym;
+}
+
+/* Look up a variable in the symbol table */
+int lookup(const char *name) {
+    Symbol *sym = symbol_table;
+
+    while (sym != NULL) {
+        if (strcmp(sym->name, name) == 0) {
+            return sym->value;
+        }
+        sym = sym->next;
+    }
+
+    // Variable not found
+    fprintf(stderr, "Error: Undefined variable '%s'\n", name);
+    return 0; // Return 0 for undefined variables
 }
 

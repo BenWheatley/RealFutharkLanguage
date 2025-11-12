@@ -5,7 +5,8 @@
       "Bash(bison:*)",
       "Bash(cc -o futhark:*)",
       "Bash(./futhark:*)",
-      "Bash(printf:*)"
+      "Bash(printf:*)",
+      "Bash(make rebuild:*)"
     ],
     "deny": [],
     "ask": []

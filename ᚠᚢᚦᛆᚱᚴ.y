@@ -3,11 +3,23 @@
 #include <stdlib.h>
 #include <string.h>
 
+// Symbol table entry structure
+typedef struct symbol {
+    char *name;
+    int value;
+    struct symbol *next;
+} Symbol;
+
+// Global symbol table (linked list)
+Symbol *symbol_table = NULL;
+
 // Declare yylex and yyerror
 int yylex(void);
 void yyerror(const char *s);
 
-int lookup(const char *s); // Stub for identifier lookup
+// Symbol table functions
+void store_variable(const char *name, int value);
+int lookup(const char *name);
 int rune_to_number(const char *s); // Converts a Futhark rune sequence to a number
 %}
 
@@ -26,13 +38,23 @@ int rune_to_number(const char *s); // Converts a Futhark rune sequence to a numb
 
 %%
 
+program:
+    /* empty */
+    | program statement
+    ;
+
 statement:
     assignment
     | expression { printf("Result: %d\n", $1); }
     ;
 
 assignment:
-    IDENTIFIER EQUAL expression { printf("Assignment: %s = %d\n", $1, $3); free($1); }
+    IDENTIFIER EQUAL expression {
+        store_variable($1, $3);
+        printf("Assignment: %s = %d\n", $1, $3);
+        free($1);
+        $$ = $3;
+    }
     ;
 
 expression:
@@ -55,6 +77,45 @@ void yyerror(const char *s) {
     fprintf(stderr, "Error: %s\n", s);
 }
 
-int lookup(const char *s) {
-    return 42; // Placeholder
+/* Store a variable in the symbol table */
+void store_variable(const char *name, int value) {
+    Symbol *sym = symbol_table;
+
+    // Search for existing variable
+    while (sym != NULL) {
+        if (strcmp(sym->name, name) == 0) {
+            // Variable exists, update value
+            sym->value = value;
+            return;
+        }
+        sym = sym->next;
+    }
+
+    // Variable doesn't exist, create new entry
+    sym = (Symbol *)malloc(sizeof(Symbol));
+    if (sym == NULL) {
+        fprintf(stderr, "Error: Out of memory\n");
+        exit(1);
+    }
+
+    sym->name = strdup(name);
+    sym->value = value;
+    sym->next = symbol_table;
+    symbol_table = sym;
+}
+
+/* Look up a variable in the symbol table */
+int lookup(const char *name) {
+    Symbol *sym = symbol_table;
+
+    while (sym != NULL) {
+        if (strcmp(sym->name, name) == 0) {
+            return sym->value;
+        }
+        sym = sym->next;
+    }
+
+    // Variable not found
+    fprintf(stderr, "Error: Undefined variable '%s'\n", name);
+    return 0; // Return 0 for undefined variables
 }

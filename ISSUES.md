@@ -57,11 +57,12 @@ This is an April Fool's joke programming language that uses Futhark runes (Old N
 
 ### Missing Core Functionality
 
-6. **No Variable Storage**
-   - File: `ᚠᚢᚦᛆᚱᚴ.y:59-61`
-   - Issue: `lookup()` function returns placeholder value 42
-   - Impact: Variables cannot be stored or retrieved
-   - Fix: Implement symbol table (hash map) to store variable assignments
+6. ✓ ~~**No Variable Storage**~~
+   - ~~File: `ᚠᚢᚦᛆᚱᚴ.y:59-61`~~
+   - ~~Issue: `lookup()` function returns placeholder value 42~~
+   - ~~Impact: Variables cannot be stored or retrieved~~
+   - ~~Fix: Implement symbol table (hash map) to store variable assignments~~
+   - **FIXED:** Implemented linked-list symbol table with `store_variable()` and `lookup()` functions. Variables can now be stored, retrieved, and reassigned. Undefined variables return 0 with error message. Added `program` rule to parser to accept multiple statements. Tested successfully with multiple variables and expressions.
 
 7. **Incomplete Arithmetic Operations**
    - Files: `ᚠᚢᚦᛆᚱᚴ.lex` and `ᚠᚢᚦᛆᚱᚴ.y`
