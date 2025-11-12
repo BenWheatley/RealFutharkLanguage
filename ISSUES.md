@@ -19,11 +19,12 @@ This is an April Fool's joke programming language that uses Futhark runes (Old N
 
 ### Critical Compilation Errors
 
-1. **Duplicate Symbol Error**
-   - File: `ᚠᚢᚦᛆᚱᚴ.y:63` and `ᚠᚢᚦᛆᚱᚴ.lex:35`
-   - Issue: `rune_to_number()` function is defined in both files
-   - Impact: Cannot compile/link the program
-   - Fix: Remove one definition, keep only the declaration in one file
+1. ✓ ~~**Duplicate Symbol Error**~~
+   - ~~File: `ᚠᚢᚦᛆᚱᚴ.y:63` and `ᚠᚢᚦᛆᚱᚴ.lex:35`~~
+   - ~~Issue: `rune_to_number()` function is defined in both files~~
+   - ~~Impact: Cannot compile/link the program~~
+   - ~~Fix: Remove one definition, keep only the declaration in one file~~
+   - **FIXED:** Removed duplicate implementation from `ᚠᚢᚦᛆᚱᚴ.y`, kept only in `ᚠᚢᚦᛆᚱᚴ.lex`
 
 2. **Type Mismatch Error**
    - File: `ᚠᚢᚦᛆᚱᚴ.lex:24`
