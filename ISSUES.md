@@ -70,19 +70,21 @@ This is an April Fool's joke programming language that uses Futhark runes (Old N
    - Impact: BNF spec promises full arithmetic but only + works
    - Fix: Add tokens and grammar rules for -, *, / operators
 
-8. **No Expression Grouping**
-   - Files: `ᚠᚢᚦᛆᚱᚴ.lex` and `ᚠᚢᚦᛆᚱᚴ.y`
-   - Issue: BNF specifies `[ ]` brackets for grouping, not implemented
-   - Impact: Cannot control operator precedence
-   - Fix: Add bracket tokens and grouping grammar rule
+8. ✓ ~~**No Expression Grouping**~~
+   - ~~Files: `ᚠᚢᚦᛆᚱᚴ.lex` and `ᚠᚢᚦᛆᚱᚴ.y`~~
+   - ~~Issue: BNF specifies `[ ]` brackets for grouping, not implemented~~
+   - ~~Impact: Cannot control operator precedence~~
+   - ~~Fix: Add bracket tokens and grouping grammar rule~~
+   - **FIXED:** Added LBRACKET and RBRACKET tokens to lexer. Added grammar rule `term: LBRACKET expression RBRACKET` to parser. Brackets now properly control evaluation order and can be nested. Tested successfully with simple, nested, and complex expressions.
 
 ### Missing Control Flow
 
-9. **No Comparison Operators**
-   - Files: `ᚠᚢᚦᛆᚱᚴ.lex` and `ᚠᚢᚦᛆᚱᚴ.y`
-   - Issue: None of the 6 comparison operators from BNF are implemented
-   - Impact: Cannot create conditions for if/while statements
-   - Fix: Add all comparison operator tokens and condition evaluation
+9. ✓ ~~**No Comparison Operators**~~
+   - ~~Files: `ᚠᚢᚦᛆᚱᚴ.lex` and `ᚠᚢᚦᛆᚱᚴ.y`~~
+   - ~~Issue: None of the 6 comparison operators from BNF are implemented~~
+   - ~~Impact: Cannot create conditions for if/while statements~~
+   - ~~Fix: Add all comparison operator tokens and condition evaluation~~
+   - **FIXED:** Implemented all six comparison operators using short Icelandic words in runes: `ᛃᚠᚾ` (==), `ᛖᛁᚴᛁ` (!=), `ᛗᛖᛁᚱ` (>), `ᛗᛁᚾ` (<), `ᛗᛖᛁᚱ᛬ᛃᚠᚾ` (>=), `ᛗᛁᚾ᛬ᛃᚠᚾ` (<=). Added `condition` grammar rule that evaluates comparisons and returns 1 for true, 0 for false. All operators tested successfully with numbers, variables, and expressions.
 
 10. **No If-Else Statements**
     - Files: `ᚠᚢᚦᛆᚱᚴ.lex` and `ᚠᚢᚦᛆᚱᚴ.y`

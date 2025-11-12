@@ -32,9 +32,10 @@ int rune_to_number(const char *s); // Converts a Futhark rune sequence to a numb
 // Token declarations with types
 %token <id> IDENTIFIER
 %token <num> NUMBER
-%token EQUAL PLUS
+%token EQUAL PLUS LBRACKET RBRACKET
+%token CMP_EQ CMP_NEQ GT LT GTE LTE
 
-%type <num> statement assignment expression term
+%type <num> statement assignment expression term condition
 
 %%
 
@@ -46,6 +47,7 @@ program:
 statement:
     assignment
     | expression { printf("Result: %d\n", $1); }
+    | condition { printf("Result: %d\n", $1); }
     ;
 
 assignment:
@@ -65,6 +67,16 @@ expression:
 term:
     IDENTIFIER { $$ = lookup($1); free($1); }
     | NUMBER { $$ = $1; }
+    | LBRACKET expression RBRACKET { $$ = $2; }
+    ;
+
+condition:
+    expression CMP_EQ expression { $$ = ($1 == $3) ? 1 : 0; }
+    | expression CMP_NEQ expression { $$ = ($1 != $3) ? 1 : 0; }
+    | expression GT expression { $$ = ($1 > $3) ? 1 : 0; }
+    | expression LT expression { $$ = ($1 < $3) ? 1 : 0; }
+    | expression GTE expression { $$ = ($1 >= $3) ? 1 : 0; }
+    | expression LTE expression { $$ = ($1 <= $3) ? 1 : 0; }
     ;
 
 %%

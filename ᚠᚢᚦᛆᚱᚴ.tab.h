@@ -42,7 +42,15 @@
      IDENTIFIER = 258,
      NUMBER = 259,
      EQUAL = 260,
-     PLUS = 261
+     PLUS = 261,
+     LBRACKET = 262,
+     RBRACKET = 263,
+     CMP_EQ = 264,
+     CMP_NEQ = 265,
+     GT = 266,
+     LT = 267,
+     GTE = 268,
+     LTE = 269
    };
 #endif
 /* Tokens.  */
@@ -50,6 +58,14 @@
 #define NUMBER 259
 #define EQUAL 260
 #define PLUS 261
+#define LBRACKET 262
+#define RBRACKET 263
+#define CMP_EQ 264
+#define CMP_NEQ 265
+#define GT 266
+#define LT 267
+#define GTE 268
+#define LTE 269
 
 
 
@@ -62,7 +78,7 @@ typedef union YYSTYPE
     char *id;     // String values for identifiers
 }
 /* Line 1529 of yacc.c.  */
-#line 66 "ᚠᚢᚦᛆᚱᚴ.tab.h"
+#line 82 "ᚠᚢᚦᛆᚱᚴ.tab.h"
 	YYSTYPE;
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
 # define YYSTYPE_IS_DECLARED 1

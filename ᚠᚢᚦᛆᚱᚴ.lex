@@ -22,6 +22,22 @@ int rune_to_number(const char *s);
 
 "᛭"            { return PLUS; } /* Matches the "plus" symbol */
 
+"["            { return LBRACKET; } /* Left bracket for grouping */
+
+"]"            { return RBRACKET; } /* Right bracket for grouping */
+
+"ᛗᛖᛁᚱ᛬ᛃᚠᚾ"   { return GTE; } /* Greater than or equal (meir jafn) */
+
+"ᛗᛁᚾ᛬ᛃᚠᚾ"    { return LTE; } /* Less than or equal (minn jafn) */
+
+"ᛃᚠᚾ"         { return CMP_EQ; } /* Equal comparison (jafn) */
+
+"ᛖᛁᚴᛁ"        { return CMP_NEQ; } /* Not equal (eigi) */
+
+"ᛗᛖᛁᚱ"        { return GT; } /* Greater than (meir) */
+
+"ᛗᛁᚾ"         { return LT; } /* Less than (minn) */
+
 [ᚠ-ᛸ]+    { /* Matches identifiers composed of Futhark runes */
     yylval.id = strdup(yytext);
     return IDENTIFIER;

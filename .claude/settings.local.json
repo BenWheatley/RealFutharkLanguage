@@ -6,7 +6,9 @@
       "Bash(cc -o futhark:*)",
       "Bash(./futhark:*)",
       "Bash(printf:*)",
-      "Bash(make rebuild:*)"
+      "Bash(make rebuild:*)",
+      "Bash(make clean:*)",
+      "Bash(make:*)"
     ],
     "deny": [],
     "ask": []
