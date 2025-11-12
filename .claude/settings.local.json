@@ -3,7 +3,9 @@
     "allow": [
       "Bash(flex:*)",
       "Bash(bison:*)",
-      "Bash(cc -o futhark:*)"
+      "Bash(cc -o futhark:*)",
+      "Bash(./futhark:*)",
+      "Bash(printf:*)"
     ],
     "deny": [],
     "ask": []

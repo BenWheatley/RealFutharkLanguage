@@ -6,29 +6,28 @@
 int rune_to_number(const char *s);
 %}
 
+%option 8bit
+%option noyywrap
+
 %%
 
 [ \t\n]+            ;   /* Ignore whitespace */
 
-\u16EB[\u16A0-\u16AF]+\u16EB { /* Matches numbers enclosed by Futhark rune dot-like divider */
+᛫[ᚠᚡᚢᚣᚤᚥᚦᚧᚨᚩᚪᚫᚬᚭᚮᚯ]+᛫ { /* Matches numbers enclosed by Futhark rune dot-like divider */
     yylval.num = rune_to_number(yytext);
     return NUMBER;
 }
 
-"\u16EC\u16EC"      { return EQUAL; } /* Matches the "equals" symbol (kinda ::) */
+"᛬᛬"      { return EQUAL; } /* Matches the "equals" symbol (double dot) */
 
-"\u16ED"            { return PLUS; } /* Matches the "plus" symbol (kinda +) */
+"᛭"            { return PLUS; } /* Matches the "plus" symbol */
 
-[\u16A0-\u16F8]+    { /* Matches identifiers composed of Futhark runes */
+[ᚠ-ᛸ]+    { /* Matches identifiers composed of Futhark runes */
     yylval.id = strdup(yytext);
     return IDENTIFIER;
 }
 
 %%
-
-int yywrap() {
-    return 1;
-}
 
 /* Convert Futhark rune numbers to their numeric equivalent */
 int rune_to_number(const char *s) {

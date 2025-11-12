@@ -41,17 +41,19 @@ This is an April Fool's joke programming language that uses Futhark runes (Old N
 
 ### Unicode and Character Encoding Issues
 
-4. **Improper Unicode Handling**
-   - File: `ᚠᚢᚦᛆᚱᚴ.lex`
-   - Issue: Using standard flex without proper UTF-8/Unicode support
-   - Impact: Runic characters may not be recognized correctly
-   - Fix: Add `%option unicode` or handle multibyte UTF-8 encoding properly
+4. ✓ ~~**Improper Unicode Handling**~~
+   - ~~File: `ᚠᚢᚦᛆᚱᚴ.lex`~~
+   - ~~Issue: Using standard flex without proper UTF-8/Unicode support~~
+   - ~~Impact: Runic characters may not be recognized correctly~~
+   - ~~Fix: Add `%option unicode` or handle multibyte UTF-8 encoding properly~~
+   - **FIXED:** Replaced `\uXXXX` escape sequences with actual Unicode rune characters in lexer patterns. Added `%option 8bit` and `%option noyywrap` for proper UTF-8 byte handling. All patterns now correctly match: numbers (᛫[runes]᛫), operators (᛬᛬ for equals, ᛭ for plus), and identifiers ([ᚠ-ᛸ]+). Tested successfully with rune input.
 
-5. **Inconsistent Character Types**
-   - Files: Throughout lexer and parser
-   - Issue: Mixing `char*`, `wchar_t*`, and assuming single-byte characters
-   - Impact: Runes are multi-byte UTF-8, will cause parsing failures
-   - Fix: Consistent use of UTF-8 byte sequences or wide character handling
+5. ✓ ~~**Inconsistent Character Types**~~
+   - ~~Files: Throughout lexer and parser~~
+   - ~~Issue: Mixing `char*`, `wchar_t*`, and assuming single-byte characters~~
+   - ~~Impact: Runes are multi-byte UTF-8, will cause parsing failures~~
+   - ~~Fix: Consistent use of UTF-8 byte sequences or wide character handling~~
+   - **FIXED:** Already resolved in issue #2 (Type Mismatch Error). All code now consistently uses `char*` with UTF-8 byte sequences.
 
 ### Missing Core Functionality
 
