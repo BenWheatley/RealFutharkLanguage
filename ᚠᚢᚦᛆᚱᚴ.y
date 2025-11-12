@@ -2,14 +2,13 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <wchar.h>
 
 // Declare yylex and yyerror
 int yylex(void);
 void yyerror(const char *s);
 
 int lookup(const char *s); // Stub for identifier lookup
-int rune_to_number(const wchar_t *s); // Converts a Futhark rune sequence to a number
+int rune_to_number(const char *s); // Converts a Futhark rune sequence to a number
 %}
 
 // Define YYSTYPE union

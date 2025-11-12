@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(flex:*)",
+      "Bash(bison:*)",
+      "Bash(cc -o futhark:*)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}

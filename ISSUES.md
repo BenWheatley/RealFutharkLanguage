@@ -26,11 +26,12 @@ This is an April Fool's joke programming language that uses Futhark runes (Old N
    - ~~Fix: Remove one definition, keep only the declaration in one file~~
    - **FIXED:** Removed duplicate implementation from `ᚠᚢᚦᛆᚱᚴ.y`, kept only in `ᚠᚢᚦᛆᚱᚴ.lex`
 
-2. **Type Mismatch Error**
-   - File: `ᚠᚢᚦᛆᚱᚴ.lex:24`
-   - Issue: Assigning `wchar_t*` to `char*` in `yylval.id = wcsdup((wchar_t *)yytext)`
-   - Impact: Incompatible pointer types warning, will cause runtime issues
-   - Fix: Proper handling of wide characters throughout the codebase
+2. ✓ ~~**Type Mismatch Error**~~
+   - ~~File: `ᚠᚢᚦᛆᚱᚴ.lex:24`~~
+   - ~~Issue: Assigning `wchar_t*` to `char*` in `yylval.id = wcsdup((wchar_t *)yytext)`~~
+   - ~~Impact: Incompatible pointer types warning, will cause runtime issues~~
+   - ~~Fix: Proper handling of wide characters throughout the codebase~~
+   - **FIXED:** Changed all `wchar_t*` to `char*` for UTF-8 handling. Updated `rune_to_number()` to work with UTF-8 byte sequences instead of wide characters. Now uses `strdup(yytext)` instead of `wcsdup()`. Compiles cleanly with no warnings.
 
 3. **Missing Build System**
    - Issue: No Makefile or build script

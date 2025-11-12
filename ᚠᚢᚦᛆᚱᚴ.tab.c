@@ -87,14 +87,13 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <wchar.h>
 
 // Declare yylex and yyerror
 int yylex(void);
 void yyerror(const char *s);
 
 int lookup(const char *s); // Stub for identifier lookup
-int rune_to_number(const wchar_t *s); // Converts a Futhark rune sequence to a number
+int rune_to_number(const char *s); // Converts a Futhark rune sequence to a number
 
 
 /* Enabling traces.  */
@@ -117,13 +116,13 @@ int rune_to_number(const wchar_t *s); // Converts a Futhark rune sequence to a n
 
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 typedef union YYSTYPE
-#line 16 "ᚠᚢᚦᛆᚱᚴ.y"
+#line 15 "ᚠᚢᚦᛆᚱᚴ.y"
 {
     int num;       // Integer values for numbers
     char *id;     // String values for identifiers
 }
 /* Line 193 of yacc.c.  */
-#line 127 "ᚠᚢᚦᛆᚱᚴ.tab.c"
+#line 126 "ᚠᚢᚦᛆᚱᚴ.tab.c"
 	YYSTYPE;
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
 # define YYSTYPE_IS_DECLARED 1
@@ -136,7 +135,7 @@ typedef union YYSTYPE
 
 
 /* Line 216 of yacc.c.  */
-#line 140 "ᚠᚢᚦᛆᚱᚴ.tab.c"
+#line 139 "ᚠᚢᚦᛆᚱᚴ.tab.c"
 
 #ifdef short
 # undef short
@@ -420,7 +419,7 @@ static const yytype_int8 yyrhs[] =
 /* YYRLINE[YYN] -- source line where rule number YYN was defined.  */
 static const yytype_uint8 yyrline[] =
 {
-       0,    31,    31,    32,    36,    40,    41,    45,    46
+       0,    30,    30,    31,    35,    39,    40,    44,    45
 };
 #endif
 
@@ -1322,38 +1321,38 @@ yyreduce:
   switch (yyn)
     {
         case 3:
-#line 32 "ᚠᚢᚦᛆᚱᚴ.y"
+#line 31 "ᚠᚢᚦᛆᚱᚴ.y"
     { printf("Result: %d\n", (yyvsp[(1) - (1)].num)); ;}
     break;
 
   case 4:
-#line 36 "ᚠᚢᚦᛆᚱᚴ.y"
+#line 35 "ᚠᚢᚦᛆᚱᚴ.y"
     { printf("Assignment: %s = %d\n", (yyvsp[(1) - (3)].id), (yyvsp[(3) - (3)].num)); free((yyvsp[(1) - (3)].id)); ;}
     break;
 
   case 5:
-#line 40 "ᚠᚢᚦᛆᚱᚴ.y"
+#line 39 "ᚠᚢᚦᛆᚱᚴ.y"
     { (yyval.num) = (yyvsp[(1) - (1)].num); ;}
     break;
 
   case 6:
-#line 41 "ᚠᚢᚦᛆᚱᚴ.y"
+#line 40 "ᚠᚢᚦᛆᚱᚴ.y"
     { (yyval.num) = (yyvsp[(1) - (3)].num) + (yyvsp[(3) - (3)].num); ;}
     break;
 
   case 7:
-#line 45 "ᚠᚢᚦᛆᚱᚴ.y"
+#line 44 "ᚠᚢᚦᛆᚱᚴ.y"
     { (yyval.num) = lookup((yyvsp[(1) - (1)].id)); free((yyvsp[(1) - (1)].id)); ;}
     break;
 
   case 8:
-#line 46 "ᚠᚢᚦᛆᚱᚴ.y"
+#line 45 "ᚠᚢᚦᛆᚱᚴ.y"
     { (yyval.num) = (yyvsp[(1) - (1)].num); ;}
     break;
 
 
 /* Line 1267 of yacc.c.  */
-#line 1357 "ᚠᚢᚦᛆᚱᚴ.tab.c"
+#line 1356 "ᚠᚢᚦᛆᚱᚴ.tab.c"
       default: break;
     }
   YY_SYMBOL_PRINT ("-> $$ =", yyr1[yyn], &yyval, &yyloc);
@@ -1567,7 +1566,7 @@ yyreturn:
 }
 
 
-#line 49 "ᚠᚢᚦᛆᚱᚴ.y"
+#line 48 "ᚠᚢᚦᛆᚱᚴ.y"
 
 
 int main(void) {

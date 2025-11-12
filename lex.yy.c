@@ -456,13 +456,12 @@ char *yytext;
 #line 1 "ᚠᚢᚦᛆᚱᚴ.lex"
 #line 2 "ᚠᚢᚦᛆᚱᚴ.lex"
 #include "ᚠᚢᚦᛆᚱᚴ.tab.h"  /* Include the Bison-generated header file */
-#include <wchar.h>         /* Include support for wide characters */
 #include <stdlib.h>
 #include <string.h>
 
-int rune_to_number(const wchar_t *s);
+int rune_to_number(const char *s);
+#line 463 "lex.yy.c"
 #line 464 "lex.yy.c"
-#line 465 "lex.yy.c"
 
 #define INITIAL 0
 
@@ -679,10 +678,10 @@ YY_DECL
 		}
 
 	{
-#line 10 "ᚠᚢᚦᛆᚱᚴ.lex"
+#line 9 "ᚠᚢᚦᛆᚱᚴ.lex"
 
 
-#line 685 "lex.yy.c"
+#line 684 "lex.yy.c"
 
 	while ( /*CONSTCOND*/1 )		/* loops until end-of-file is reached */
 		{
@@ -742,41 +741,41 @@ do_action:	/* This label is used only to access EOF actions. */
 case 1:
 /* rule 1 can match eol */
 YY_RULE_SETUP
-#line 12 "ᚠᚢᚦᛆᚱᚴ.lex"
+#line 11 "ᚠᚢᚦᛆᚱᚴ.lex"
 ;   /* Ignore whitespace */
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
-#line 14 "ᚠᚢᚦᛆᚱᚴ.lex"
+#line 13 "ᚠᚢᚦᛆᚱᚴ.lex"
 { /* Matches numbers enclosed by Futhark rune dot-like divider */
-    yylval.num = rune_to_number((wchar_t *)yytext);
-    return NUMBER; 
+    yylval.num = rune_to_number(yytext);
+    return NUMBER;
 }
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
-#line 19 "ᚠᚢᚦᛆᚱᚴ.lex"
+#line 18 "ᚠᚢᚦᛆᚱᚴ.lex"
 { return EQUAL; } /* Matches the "equals" symbol (kinda ::) */
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 21 "ᚠᚢᚦᛆᚱᚴ.lex"
+#line 20 "ᚠᚢᚦᛆᚱᚴ.lex"
 { return PLUS; } /* Matches the "plus" symbol (kinda +) */
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 23 "ᚠᚢᚦᛆᚱᚴ.lex"
+#line 22 "ᚠᚢᚦᛆᚱᚴ.lex"
 { /* Matches identifiers composed of Futhark runes */
-    yylval.id = wcsdup((wchar_t *)yytext);
-    return IDENTIFIER; 
+    yylval.id = strdup(yytext);
+    return IDENTIFIER;
 }
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 28 "ᚠᚢᚦᛆᚱᚴ.lex"
+#line 27 "ᚠᚢᚦᛆᚱᚴ.lex"
 ECHO;
 	YY_BREAK
-#line 779 "lex.yy.c"
+#line 778 "lex.yy.c"
 case YY_STATE_EOF(INITIAL):
 	yyterminate();
 
@@ -1781,7 +1780,7 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 28 "ᚠᚢᚦᛆᚱᚴ.lex"
+#line 27 "ᚠᚢᚦᛆᚱᚴ.lex"
 
 
 int yywrap() {
@@ -1789,31 +1788,33 @@ int yywrap() {
 }
 
 /* Convert Futhark rune numbers to their numeric equivalent */
-int rune_to_number(const wchar_t *s) {
+int rune_to_number(const char *s) {
     int value = 0;
-    s++;  /* Skip the leading rune '᛭' */
-    while (*s != L'\0' && *s != L'᛭') {
-        value *= 16;
-        switch (*s) {
-            case L'ᚠ': value += 0; break;
-            case L'ᚡ': value += 1; break;
-            case L'ᚢ': value += 2; break;
-            case L'ᚣ': value += 3; break;
-            case L'ᚤ': value += 4; break;
-            case L'ᚥ': value += 5; break;
-            case L'ᚦ': value += 6; break;
-            case L'ᚧ': value += 7; break;
-            case L'ᚨ': value += 8; break;
-            case L'ᚩ': value += 9; break;
-            case L'ᚪ': value += 10; break;
-            case L'ᚫ': value += 11; break;
-            case L'ᚬ': value += 12; break;
-            case L'ᚭ': value += 13; break;
-            case L'ᚮ': value += 14; break;
-            case L'ᚯ': value += 15; break;
-            default: return -1;  /* Invalid rune */
+    /* Skip the leading rune '᛫' (U+16EB, 3 bytes in UTF-8: E1 9B AB) */
+    s += 3;
+
+    /* Process each rune until we hit null terminator or closing '᛫' */
+    while (*s != '\0') {
+        /* Check if we've hit the closing delimiter (᛫) */
+        if ((unsigned char)s[0] == 0xE1 && (unsigned char)s[1] == 0x9B && (unsigned char)s[2] == 0xAB) {
+            break;
         }
-        s++;
+
+        value *= 16;
+
+        /* Runes U+16A0-U+16AF encode hex digits 0-F */
+        /* UTF-8 encoding: E1 9A [A0-AF] */
+        if ((unsigned char)s[0] == 0xE1 && (unsigned char)s[1] == 0x9A) {
+            unsigned char third_byte = (unsigned char)s[2];
+            if (third_byte >= 0xA0 && third_byte <= 0xAF) {
+                value += (third_byte - 0xA0);
+                s += 3;
+            } else {
+                return -1;  /* Invalid rune */
+            }
+        } else {
+            return -1;  /* Invalid rune */
+        }
     }
     return value;
 }
