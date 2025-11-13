@@ -1,5 +1,6 @@
 %{
 #include "ᚠᚢᚦᛆᚱᚴ.tab.h"  /* Include the Bison-generated header file */
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
@@ -89,12 +90,12 @@ int rune_to_number(const char *s) {
                 value += (third_byte - 0xA0);
                 s += 3;
             } else {
-                fprintf(stderr, "Lexer error: Invalid rune in number: %s\n", original);
-                return -1;  /* Invalid rune */
+                fprintf(stderr, "Fatal error: Invalid rune in number literal: %s\n", original);
+                exit(1);
             }
         } else {
-            fprintf(stderr, "Lexer error: Invalid rune in number: %s\n", original);
-            return -1;  /* Invalid rune */
+            fprintf(stderr, "Fatal error: Invalid rune in number literal: %s\n", original);
+            exit(1);
         }
     }
     return value;

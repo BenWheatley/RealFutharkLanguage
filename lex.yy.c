@@ -588,12 +588,13 @@ char *yytext;
 #line 1 "ᚠᚢᚦᛆᚱᚴ.lex"
 #line 2 "ᚠᚢᚦᛆᚱᚴ.lex"
 #include "ᚠᚢᚦᛆᚱᚴ.tab.h"  /* Include the Bison-generated header file */
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
 int rune_to_number(const char *s);
-#line 595 "lex.yy.c"
 #line 596 "lex.yy.c"
+#line 597 "lex.yy.c"
 
 #define INITIAL 0
 
@@ -810,10 +811,10 @@ YY_DECL
 		}
 
 	{
-#line 13 "ᚠᚢᚦᛆᚱᚴ.lex"
+#line 14 "ᚠᚢᚦᛆᚱᚴ.lex"
 
 
-#line 816 "lex.yy.c"
+#line 817 "lex.yy.c"
 
 	while ( /*CONSTCOND*/1 )		/* loops until end-of-file is reached */
 		{
@@ -883,12 +884,12 @@ do_action:	/* This label is used only to access EOF actions. */
 case 1:
 /* rule 1 can match eol */
 YY_RULE_SETUP
-#line 15 "ᚠᚢᚦᛆᚱᚴ.lex"
+#line 16 "ᚠᚢᚦᛆᚱᚴ.lex"
 ;   /* Ignore whitespace */
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
-#line 17 "ᚠᚢᚦᛆᚱᚴ.lex"
+#line 18 "ᚠᚢᚦᛆᚱᚴ.lex"
 { /* Matches numbers enclosed by Futhark rune dot-like divider */
     yylval.num = rune_to_number(yytext);
     return NUMBER;
@@ -896,92 +897,92 @@ YY_RULE_SETUP
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
-#line 22 "ᚠᚢᚦᛆᚱᚴ.lex"
+#line 23 "ᚠᚢᚦᛆᚱᚴ.lex"
 { return EQUAL; } /* Matches the "equals" symbol (double dot) */
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 24 "ᚠᚢᚦᛆᚱᚴ.lex"
+#line 25 "ᚠᚢᚦᛆᚱᚴ.lex"
 { return PLUS; } /* Matches the "plus" symbol */
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 26 "ᚠᚢᚦᛆᚱᚴ.lex"
+#line 27 "ᚠᚢᚦᛆᚱᚴ.lex"
 { return MINUS; } /* Matches the "minus" operator (mnus) */
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 28 "ᚠᚢᚦᛆᚱᚴ.lex"
+#line 29 "ᚠᚢᚦᛆᚱᚴ.lex"
 { return MULTIPLY; } /* Matches the "multiply" operator (sinnum) */
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 30 "ᚠᚢᚦᛆᚱᚴ.lex"
+#line 31 "ᚠᚢᚦᛆᚱᚴ.lex"
 { return DIVIDE; } /* Matches the "divide" operator (deilt með) */
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 32 "ᚠᚢᚦᛆᚱᚴ.lex"
+#line 33 "ᚠᚢᚦᛆᚱᚴ.lex"
 { return LBRACKET; } /* Left bracket for grouping */
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 34 "ᚠᚢᚦᛆᚱᚴ.lex"
+#line 35 "ᚠᚢᚦᛆᚱᚴ.lex"
 { return RBRACKET; } /* Right bracket for grouping */
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
-#line 36 "ᚠᚢᚦᛆᚱᚴ.lex"
+#line 37 "ᚠᚢᚦᛆᚱᚴ.lex"
 { return GTE; } /* Greater than or equal (meir jafn) */
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 38 "ᚠᚢᚦᛆᚱᚴ.lex"
+#line 39 "ᚠᚢᚦᛆᚱᚴ.lex"
 { return LTE; } /* Less than or equal (minn jafn) */
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
-#line 40 "ᚠᚢᚦᛆᚱᚴ.lex"
+#line 41 "ᚠᚢᚦᛆᚱᚴ.lex"
 { return CMP_EQ; } /* Equal comparison (jafn) */
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
-#line 42 "ᚠᚢᚦᛆᚱᚴ.lex"
+#line 43 "ᚠᚢᚦᛆᚱᚴ.lex"
 { return CMP_NEQ; } /* Not equal (eigi) */
 	YY_BREAK
 case 14:
 YY_RULE_SETUP
-#line 44 "ᚠᚢᚦᛆᚱᚴ.lex"
+#line 45 "ᚠᚢᚦᛆᚱᚴ.lex"
 { return GT; } /* Greater than (meir) */
 	YY_BREAK
 case 15:
 YY_RULE_SETUP
-#line 46 "ᚠᚢᚦᛆᚱᚴ.lex"
+#line 47 "ᚠᚢᚦᛆᚱᚴ.lex"
 { return LT; } /* Less than (minn) */
 	YY_BREAK
 case 16:
 YY_RULE_SETUP
-#line 48 "ᚠᚢᚦᛆᚱᚴ.lex"
+#line 49 "ᚠᚢᚦᛆᚱᚴ.lex"
 { return IF; } /* If keyword (ef) */
 	YY_BREAK
 case 17:
 YY_RULE_SETUP
-#line 50 "ᚠᚢᚦᛆᚱᚴ.lex"
+#line 51 "ᚠᚢᚦᛆᚱᚴ.lex"
 { return ELSE; } /* Else keyword (annað) */
 	YY_BREAK
 case 18:
 YY_RULE_SETUP
-#line 52 "ᚠᚢᚦᛆᚱᚴ.lex"
+#line 53 "ᚠᚢᚦᛆᚱᚴ.lex"
 { return WHILE; } /* While keyword (while) */
 	YY_BREAK
 case 19:
 YY_RULE_SETUP
-#line 54 "ᚠᚢᚦᛆᚱᚴ.lex"
+#line 55 "ᚠᚢᚦᛆᚱᚴ.lex"
 { return END; } /* End keyword (enda) */
 	YY_BREAK
 case 20:
 YY_RULE_SETUP
-#line 56 "ᚠᚢᚦᛆᚱᚴ.lex"
+#line 57 "ᚠᚢᚦᛆᚱᚴ.lex"
 { /* Matches identifiers: UTF-8 runes U+16A0-U+16F8 */
     yylval.id = strdup(yytext);
     if (yylval.id == NULL) {
@@ -993,10 +994,10 @@ YY_RULE_SETUP
 	YY_BREAK
 case 21:
 YY_RULE_SETUP
-#line 65 "ᚠᚢᚦᛆᚱᚴ.lex"
+#line 66 "ᚠᚢᚦᛆᚱᚴ.lex"
 ECHO;
 	YY_BREAK
-#line 999 "lex.yy.c"
+#line 1000 "lex.yy.c"
 case YY_STATE_EOF(INITIAL):
 	yyterminate();
 
@@ -2013,7 +2014,7 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 65 "ᚠᚢᚦᛆᚱᚴ.lex"
+#line 66 "ᚠᚢᚦᛆᚱᚴ.lex"
 
 
 /* Convert Futhark rune numbers to their numeric equivalent */
@@ -2041,12 +2042,12 @@ int rune_to_number(const char *s) {
                 value += (third_byte - 0xA0);
                 s += 3;
             } else {
-                fprintf(stderr, "Lexer error: Invalid rune in number: %s\n", original);
-                return -1;  /* Invalid rune */
+                fprintf(stderr, "Fatal error: Invalid rune in number literal: %s\n", original);
+                exit(1);
             }
         } else {
-            fprintf(stderr, "Lexer error: Invalid rune in number: %s\n", original);
-            return -1;  /* Invalid rune */
+            fprintf(stderr, "Fatal error: Invalid rune in number literal: %s\n", original);
+            exit(1);
         }
     }
     return value;

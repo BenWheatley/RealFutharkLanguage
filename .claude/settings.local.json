@@ -13,7 +13,9 @@
       "Bash(test_invalid_utf8_number.ᚠᚢᚦᛆᚱᚴ)",
       "Bash(test_truncated_utf8.ᚠᚢᚦᛆᚱᚴ)",
       "Bash(test_overlong_utf8.ᚠᚢᚦᛆᚱᚴ)",
-      "Bash(leaks futhark:*)"
+      "Bash(leaks futhark:*)",
+      "Bash(test_invalid_rune_in_number.ᚠᚢᚦᛆᚱᚴ)",
+      "Bash(echo:*)"
     ],
     "deny": [],
     "ask": []
