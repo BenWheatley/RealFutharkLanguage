@@ -55,6 +55,10 @@ int rune_to_number(const char *s);
 
 (\341\232[\240-\277]|\341\233[\200-\270])+    { /* Matches identifiers: UTF-8 runes U+16A0-U+16F8 */
     yylval.id = strdup(yytext);
+    if (yylval.id == NULL) {
+        fprintf(stderr, "Fatal error: Out of memory (strdup failed for identifier)\n");
+        exit(1);
+    }
     return IDENTIFIER;
 }
 

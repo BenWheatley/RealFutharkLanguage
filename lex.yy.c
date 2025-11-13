@@ -984,15 +984,19 @@ YY_RULE_SETUP
 #line 56 "ᚠᚢᚦᛆᚱᚴ.lex"
 { /* Matches identifiers: UTF-8 runes U+16A0-U+16F8 */
     yylval.id = strdup(yytext);
+    if (yylval.id == NULL) {
+        fprintf(stderr, "Fatal error: Out of memory (strdup failed for identifier)\n");
+        exit(1);
+    }
     return IDENTIFIER;
 }
 	YY_BREAK
 case 21:
 YY_RULE_SETUP
-#line 61 "ᚠᚢᚦᛆᚱᚴ.lex"
+#line 65 "ᚠᚢᚦᛆᚱᚴ.lex"
 ECHO;
 	YY_BREAK
-#line 995 "lex.yy.c"
+#line 999 "lex.yy.c"
 case YY_STATE_EOF(INITIAL):
 	yyterminate();
 
@@ -2009,7 +2013,7 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 61 "ᚠᚢᚦᛆᚱᚴ.lex"
+#line 65 "ᚠᚢᚦᛆᚱᚴ.lex"
 
 
 /* Convert Futhark rune numbers to their numeric equivalent */

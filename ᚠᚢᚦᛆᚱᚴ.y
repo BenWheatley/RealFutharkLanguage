@@ -267,6 +267,11 @@ void store_variable(const char *name, int value) {
     }
 
     sym->name = strdup(name);
+    if (sym->name == NULL) {
+        fprintf(stderr, "Error: Out of memory (strdup failed for variable name)\n");
+        free(sym);
+        exit(1);
+    }
     sym->value = value;
     sym->next = symbol_table;
     symbol_table = sym;
