@@ -143,113 +143,127 @@ Each task is scoped to approximately 60-90 minutes for a developer.
 
 ### Phase 1: Get It Compiling (Tasks 1-3)
 
-- [ ] **Task 1: Fix immediate compilation errors**
+- [x] **Task 1: Fix immediate compilation errors** ✓
   - Remove duplicate `rune_to_number()` definition
   - Fix char*/wchar_t* type mismatches
   - Verify clean compilation
   - **Time estimate:** 60 minutes
   - **Files:** `ᚠᚢᚦᛆᚱᚴ.y`, `ᚠᚢᚦᛆᚱᚴ.lex`
+  - **COMPLETED:** See issues #1 and #2
 
-- [ ] **Task 2: Create Makefile**
+- [x] **Task 2: Create Makefile** ✓
   - Add targets for lexer generation (flex)
   - Add targets for parser generation (bison)
   - Add compilation target with proper flags
   - Add clean target
   - **Time estimate:** 45 minutes
   - **Files:** New `Makefile`
+  - **COMPLETED:** See issue #3
 
-- [ ] **Task 3: Implement proper UTF-8/Unicode handling**
+- [x] **Task 3: Implement proper UTF-8/Unicode handling** ✓
   - Research flex Unicode support options
   - Implement consistent UTF-8 byte handling
   - Test with actual runic input
   - **Time estimate:** 90 minutes
   - **Files:** `ᚠᚢᚦᛆᚱᚴ.lex`, possibly `ᚠᚢᚦᛆᚱᚴ.y`
+  - **COMPLETED:** See issues #4 and #5
 
 ### Phase 2: Core Functionality (Tasks 4-7)
 
-- [ ] **Task 4: Add symbol table for variables**
+- [x] **Task 4: Add symbol table for variables** ✓
   - Implement hash map for variable storage
   - Update `lookup()` to retrieve from table
   - Update assignment to store in table
   - Handle undefined variable errors
   - **Time estimate:** 90 minutes
   - **Files:** `ᚠᚢᚦᛆᚱᚴ.y`
+  - **COMPLETED:** See issue #6. Tested with `test.ᚠᚢᚦᛆᚱᚴ` and `comprehensive_test.ᚠᚢᚦᛆᚱᚴ`
 
-- [ ] **Task 5: Extend lexer for minus and multiply**
+- [x] **Task 5: Extend lexer for minus and multiply** ✓
   - Add token patterns for ᛗᚾᚢᛊ and ᛊᛁᚾᚾᚢᛗ
   - Define MINUS and MULTIPLY tokens
   - **Time estimate:** 30 minutes
   - **Files:** `ᚠᚢᚦᛆᚱᚴ.lex`
+  - **COMPLETED:** See issue #7
 
-- [ ] **Task 6: Add division operator and parser rules**
+- [x] **Task 6: Add division operator and parser rules** ✓
   - Add token pattern for ᛞᛖᛁᛚᛏ᛬ᛗᛖᚦ
   - Add grammar rules for -, *, / in expression
   - Set proper operator precedence
   - **Time estimate:** 60 minutes
   - **Files:** `ᚠᚢᚦᛆᚱᚴ.lex`, `ᚠᚢᚦᛆᚱᚴ.y`
+  - **COMPLETED:** See issue #7. Tested with `simple.ᚠᚢᚦᛆᚱᚴ` showing correct precedence
 
-- [ ] **Task 7: Implement bracket grouping**
+- [x] **Task 7: Implement bracket grouping** ✓
   - Add [ and ] tokens to lexer
   - Add grouping rule to expression grammar
   - Test precedence override
   - **Time estimate:** 45 minutes
   - **Files:** `ᚠᚢᚦᛆᚱᚴ.lex`, `ᚠᚢᚦᛆᚱᚴ.y`
+  - **COMPLETED:** See issue #8. Tested with `comprehensive_test.ᚠᚢᚦᛆᚱᚴ`
 
 ### Phase 3: Conditions (Tasks 8-9)
 
-- [ ] **Task 8: Add all comparison operators to lexer**
+- [x] **Task 8: Add all comparison operators to lexer** ✓
   - Add tokens for all 6 comparison operators with runic patterns
   - Define CMP_EQ, CMP_NEQ, CMP_GT, CMP_LT, CMP_GTE, CMP_LTE
   - **Time estimate:** 60 minutes
   - **Files:** `ᚠᚢᚦᛆᚱᚴ.lex`
+  - **COMPLETED:** See issue #9. Used Icelandic words: ᛃᚠᚾ (==), ᛖᛁᚴᛁ (!=), etc.
 
-- [ ] **Task 9: Implement condition evaluation**
+- [x] **Task 9: Implement condition evaluation** ✓
   - Add condition grammar rule
   - Add comparison expression evaluation
   - Return boolean results (0 or 1)
   - **Time estimate:** 75 minutes
   - **Files:** `ᚠᚢᚦᛆᚱᚴ.y`
+  - **COMPLETED:** See issue #9. Tested with `if_simple.ᚠᚢᚦᛆᚱᚴ` and `if_else_test.ᚠᚢᚦᛆᚱᚴ`
 
 ### Phase 4: Control Flow (Tasks 10-13)
 
-- [ ] **Task 10: Implement if-else statements**
+- [x] **Task 10: Implement if-else statements** ✓
   - Add keywords ᛖᚠ, ᚨᚾᚾᚨᚦ, ᛖᚾᛞᚨ to lexer
   - Add if-statement grammar rule
   - Implement basic if-else logic (immediate execution)
   - **Time estimate:** 90 minutes
   - **Files:** `ᚠᚢᚦᛆᚱᚴ.lex`, `ᚠᚢᚦᛆᚱᚴ.y`
+  - **COMPLETED:** See issue #10. Tested with `if_simple.ᚠᚢᚦᛆᚱᚴ`, `if_else_test.ᚠᚢᚦᛆᚱᚴ`, and `comprehensive_test.ᚠᚢᚦᛆᚱᚴ`
 
-- [ ] **Task 11: Implement while loops**
+- [x] **Task 11: Implement while loops** ✓
   - Add keyword ᚹᚢᛁᛚᛖ to lexer
   - Add while-loop grammar rule
   - Implement basic loop logic (immediate execution)
   - **Time estimate:** 90 minutes
   - **Files:** `ᚠᚢᚦᛆᚱᚴ.lex`, `ᚠᚢᚦᛆᚱᚴ.y`
+  - **COMPLETED:** See issue #11. Tested with `while_test.ᚠᚢᚦᛆᚱᚴ`, `nested_test.ᚠᚢᚦᛆᚱᚴ`, and `factorial.ᚠᚢᚦᛆᚱᚴ`
 
-- [ ] **Task 12: Create AST data structures**
+- [x] **Task 12: Create AST data structures** ✓
   - Define node types for all statement/expression kinds
   - Create AST node construction functions
   - Update grammar rules to build AST instead of executing
   - **Time estimate:** 90 minutes
   - **Files:** `ᚠᚢᚦᛆᚱᚴ.y`, possibly new `ast.h`
+  - **COMPLETED:** See issue #12. AST implementation in `ᚠᚢᚦᛆᚱᚴ.y` with 8 node types
 
-- [ ] **Task 13: Implement AST evaluation**
+- [x] **Task 13: Implement AST evaluation** ✓
   - Write recursive evaluator for AST
   - Implement proper control flow (if/while execute child nodes conditionally)
   - Update main() to build then evaluate AST
   - **Time estimate:** 90 minutes
   - **Files:** `ᚠᚢᚦᛆᚱᚴ.y` or new `interpreter.c`
+  - **COMPLETED:** See issue #12. `evaluate_ast()` function handles all control flow
 
 ### Phase 5: Polish (Tasks 14-17)
 
-- [ ] **Task 14: Add file input support**
+- [x] **Task 14: Add file input support** ✓
   - Parse command-line arguments in main()
   - Open file and set yyin
   - Handle file errors gracefully
   - **Time estimate:** 45 minutes
   - **Files:** `ᚠᚢᚦᛆᚱᚴ.y`
+  - **COMPLETED:** See issue #13. All test files run from command line: `./futhark file.ᚠᚢᚦᛆᚱᚴ`
 
-- [ ] **Task 15: Create test program examples**
+- [x] **Task 15: Create test program examples** ✓
   - Write arithmetic test program
   - Write variable assignment test
   - Write conditional test (if-else)
@@ -257,13 +271,15 @@ Each task is scoped to approximately 60-90 minutes for a developer.
   - Write comprehensive program using all features
   - **Time estimate:** 75 minutes
   - **Files:** New test files in runic syntax
+  - **COMPLETED:** See issue #15. Created 12 test files demonstrating all features
 
-- [ ] **Task 16: Add better error reporting**
+- [x] **Task 16: Add better error reporting** ✓
   - Track line and column numbers in lexer
   - Enhance yyerror() with position information
   - Add error recovery in parser
   - **Time estimate:** 75 minutes
   - **Files:** `ᚠᚢᚦᛆᚱᚴ.lex`, `ᚠᚢᚦᛆᚱᚴ.y`
+  - **COMPLETED:** See issue #14. Tested with `error_test*.ᚠᚢᚦᛆᚱᚴ` files showing proper file:line context
 
 - [ ] **Task 17: Write usage documentation**
   - Explain what the language is (April Fool's joke)
@@ -272,19 +288,47 @@ Each task is scoped to approximately 60-90 minutes for a developer.
   - Add language feature reference
   - **Time estimate:** 60 minutes
   - **Files:** Update `README.md`
+  - **STATUS:** Only remaining task
 
 ---
 
 ## Total Estimated Effort
 
-- 17 tasks
-- Approximately 1,140 minutes (19 hours)
-- 2-3 days of focused development work
+- 17 tasks total
+- ✓ **16 tasks completed** (94%)
+- ❌ **1 task remaining** (6%)
+- Approximately 1,140 minutes estimated (19 hours)
+- Actual completion: 1,080 minutes of estimated work done
 
-## Priority Order
+## Completion Status by Phase
 
-1. **Critical Path:** Tasks 1-3 (must compile first)
-2. **High Priority:** Tasks 4, 7 (basic functionality)
-3. **Medium Priority:** Tasks 5-6, 8-9 (complete arithmetic and comparisons)
-4. **Low Priority:** Tasks 10-13 (control flow - complex but makes it "complete")
-5. **Nice to Have:** Tasks 14-17 (polish and documentation)
+1. ✓ **Phase 1: Get It Compiling** (Tasks 1-3) - 100% COMPLETE
+2. ✓ **Phase 2: Core Functionality** (Tasks 4-7) - 100% COMPLETE
+3. ✓ **Phase 3: Conditions** (Tasks 8-9) - 100% COMPLETE
+4. ✓ **Phase 4: Control Flow** (Tasks 10-13) - 100% COMPLETE
+5. ⚠️ **Phase 5: Polish** (Tasks 14-17) - 75% COMPLETE (only documentation remaining)
+
+## Original Priority Order
+
+1. ✓ **Critical Path:** Tasks 1-3 (must compile first) - DONE
+2. ✓ **High Priority:** Tasks 4, 7 (basic functionality) - DONE
+3. ✓ **Medium Priority:** Tasks 5-6, 8-9 (complete arithmetic and comparisons) - DONE
+4. ✓ **Low Priority:** Tasks 10-13 (control flow - complex but makes it "complete") - DONE
+5. ⚠️ **Nice to Have:** Tasks 14-17 (polish and documentation) - 3/4 DONE
+
+## What Works Now
+
+The RealFutharkLanguage interpreter is **fully functional** with all core features implemented:
+
+✓ Variables and assignments
+✓ All arithmetic operators (+, -, *, /) with correct precedence
+✓ Bracket grouping for expression control
+✓ All 6 comparison operators (==, !=, >, <, >=, <=)
+✓ If-else conditional statements
+✓ While loops
+✓ File input from .ᚠᚢᚦᛆᚱᚴ files
+✓ Comprehensive error reporting with file:line information
+✓ 12 test programs demonstrating all features
+✓ Makefile build system
+
+**Only remaining:** User documentation (README.md)

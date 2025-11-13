@@ -67,8 +67,13 @@ install: $(TARGET)
 	sudo cp $(TARGET) /usr/local/bin/
 	@echo "✓ Installed $(TARGET) to /usr/local/bin"
 
+# Run automated tests
+test: $(TARGET)
+	@echo "Running automated test suite..."
+	@./run_tests.sh
+
 # Phony targets
-.PHONY: all clean rebuild install
+.PHONY: all clean rebuild install test help
 
 # Help target
 help:
@@ -79,11 +84,13 @@ help:
 	@echo "  all      - Build the Futhark interpreter (default)"
 	@echo "  clean    - Remove all generated files and build artifacts"
 	@echo "  rebuild  - Clean and build from scratch"
+	@echo "  test     - Run automated test suite"
 	@echo "  install  - Install the interpreter to /usr/local/bin"
 	@echo "  help     - Show this help message"
 	@echo ""
 	@echo "Usage:"
 	@echo "  make           # Build the interpreter"
+	@echo "  make test      # Run all tests"
 	@echo "  make clean     # Clean build artifacts"
 	@echo "  make rebuild   # Clean and rebuild"
 	@echo "  make install   # Install system-wide"

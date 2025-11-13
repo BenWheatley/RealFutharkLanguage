@@ -8,7 +8,8 @@
       "Bash(printf:*)",
       "Bash(make rebuild:*)",
       "Bash(make clean:*)",
-      "Bash(make:*)"
+      "Bash(make:*)",
+      "Bash(./run_tests.sh:*)"
     ],
     "deny": [],
     "ask": []
