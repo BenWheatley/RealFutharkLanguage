@@ -22,6 +22,7 @@ typedef enum {
     AST_CONDITION,
     AST_ASSIGNMENT,
     AST_IF,
+    AST_WHILE,
     AST_BLOCK
 } ASTNodeType;
 
@@ -46,6 +47,10 @@ typedef struct ASTNode {
             struct ASTNode *else_block;
         } if_stmt;
         struct {
+            struct ASTNode *condition;
+            struct ASTNode *body;
+        } while_stmt;
+        struct {
             struct ASTNode **statements;
             int count;
             int capacity;
@@ -68,6 +73,7 @@ ASTNode* create_identifier_node(char *name);
 ASTNode* create_binary_op_node(char op, ASTNode *left, ASTNode *right);
 ASTNode* create_assignment_node(char *var_name, ASTNode *expr);
 ASTNode* create_if_node(ASTNode *condition, ASTNode *then_block, ASTNode *else_block);
+ASTNode* create_while_node(ASTNode *condition, ASTNode *body);
 ASTNode* create_block_node();
 void block_add_statement(ASTNode *block, ASTNode *stmt);
 int evaluate_ast(ASTNode *node);
@@ -86,9 +92,9 @@ void free_ast(ASTNode *node);
 %token <num> NUMBER
 %token EQUAL PLUS MINUS MULTIPLY DIVIDE LBRACKET RBRACKET
 %token CMP_EQ CMP_NEQ GT LT GTE LTE
-%token IF ELSE END
+%token IF ELSE WHILE END
 
-%type <ast> statement assignment expression term factor condition if_statement statement_list
+%type <ast> statement assignment expression term factor condition if_statement while_statement statement_list
 
 %%
 
@@ -97,7 +103,7 @@ program:
     | program statement {
         if ($2) {
             int result = evaluate_ast($2);
-            if ($2->type != AST_ASSIGNMENT && $2->type != AST_IF) {
+            if ($2->type != AST_ASSIGNMENT && $2->type != AST_IF && $2->type != AST_WHILE) {
                 printf("Result: %d\n", result);
             }
             free_ast($2);
@@ -110,6 +116,7 @@ statement:
     | expression
     | condition
     | if_statement
+    | while_statement
     ;
 
 assignment:
@@ -151,6 +158,12 @@ if_statement:
     }
     | IF condition statement_list ELSE statement_list END {
         $$ = create_if_node($2, $3, $5);
+    }
+    ;
+
+while_statement:
+    WHILE condition statement_list END {
+        $$ = create_while_node($2, $3);
     }
     ;
 
@@ -303,6 +316,18 @@ ASTNode* create_if_node(ASTNode *condition, ASTNode *then_block, ASTNode *else_b
     return node;
 }
 
+ASTNode* create_while_node(ASTNode *condition, ASTNode *body) {
+    ASTNode *node = (ASTNode *)malloc(sizeof(ASTNode));
+    if (node == NULL) {
+        fprintf(stderr, "Error: Out of memory\n");
+        exit(1);
+    }
+    node->type = AST_WHILE;
+    node->data.while_stmt.condition = condition;
+    node->data.while_stmt.body = body;
+    return node;
+}
+
 ASTNode* create_block_node() {
     ASTNode *node = (ASTNode *)malloc(sizeof(ASTNode));
     if (node == NULL) {
@@ -398,6 +423,14 @@ int evaluate_ast(ASTNode *node) {
             return 0;
         }
 
+        case AST_WHILE: {
+            int result = 0;
+            while (evaluate_ast(node->data.while_stmt.condition)) {
+                result = evaluate_ast(node->data.while_stmt.body);
+            }
+            return result;
+        }
+
         case AST_BLOCK: {
             int result = 0;
             for (int i = 0; i < node->data.block.count; i++) {
@@ -442,6 +475,11 @@ void free_ast(ASTNode *node) {
             free_ast(node->data.if_stmt.condition);
             free_ast(node->data.if_stmt.then_block);
             free_ast(node->data.if_stmt.else_block);
+            break;
+
+        case AST_WHILE:
+            free_ast(node->data.while_stmt.condition);
+            free_ast(node->data.while_stmt.body);
             break;
 
         case AST_BLOCK:

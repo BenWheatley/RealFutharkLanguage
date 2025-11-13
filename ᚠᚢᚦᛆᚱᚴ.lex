@@ -48,6 +48,8 @@ int rune_to_number(const char *s);
 
 "ᚨᚾᚾᚨᚦ"       { return ELSE; } /* Else keyword (annað) */
 
+"ᚹᚢᛁᛚᛖ"       { return WHILE; } /* While keyword (while) */
+
 "ᛖᚾᛞᚨ"        { return END; } /* End keyword (enda) */
 
 (\341\232[\240-\277]|\341\233[\200-\270])+    { /* Matches identifiers: UTF-8 runes U+16A0-U+16F8 */

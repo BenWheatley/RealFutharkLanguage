@@ -94,17 +94,19 @@ This is an April Fool's joke programming language that uses Futhark runes (Old N
     - ~~Fix: Add keywords ᛖᚠ, ᚨᚾᚾᚨᚦ, ᛖᚾᛞᚨ and implement if-else logic~~
     - **FIXED:** Implemented complete if-else statement support. Added keywords to lexer: `ᛖᚠ` (if), `ᚨᚾᚾᚨᚦ` (else), `ᛖᚾᛞᚨ` (end). Created Abstract Syntax Tree (AST) data structures with node types for numbers, identifiers, binary operations, assignments, if statements, and statement blocks. Rewrote parser grammar to build AST instead of immediate execution. Implemented AST evaluation with conditional execution support. Fixed identifier lexer pattern to properly capture full 3-byte UTF-8 rune sequences using octal escapes `(\341\232[\240-\277]|\341\233[\200-\270])+`. Both if-only and if-else branches tested successfully with correct conditional execution.
 
-11. **No While Loops**
-    - Files: `ᚠᚢᚦᛆᚱᚴ.lex` and `ᚠᚢᚦᛆᚱᚴ.y`
-    - Issue: BNF defines while loops, not implemented
-    - Impact: No iteration capability
-    - Fix: Add keywords ᚹᚢᛁᛚᛖ, ᛖᚾᛞᚨ and implement loop logic
+11. ✓ ~~**No While Loops**~~
+    - ~~Files: `ᚠᚢᚦᛆᚱᚴ.lex` and `ᚠᚢᚦᛆᚱᚴ.y`~~
+    - ~~Issue: BNF defines while loops, not implemented~~
+    - ~~Impact: No iteration capability~~
+    - ~~Fix: Add keywords ᚹᚢᛁᛚᛖ, ᛖᚾᛞᚨ and implement loop logic~~
+    - **FIXED:** Implemented complete while loop support. Added `ᚹᚢᛁᛚᛖ` (while) keyword to lexer, sharing the existing `ᛖᚾᛞᚨ` (end) keyword. Created AST_WHILE node type with condition and body fields. Added while_statement grammar rule and integrated with statement_list for loop body. Implemented loop evaluation in evaluate_ast that repeatedly evaluates condition and executes body until condition becomes false. Added proper memory cleanup in free_ast. Tested successfully with simple loops, nested if-inside-while, and accumulator patterns. All previous tests continue to pass.
 
-12. **No AST for Deferred Execution**
-    - File: `ᚠᚢᚦᛆᚱᚴ.y`
-    - Issue: Current parser executes immediately, cannot support control flow
-    - Impact: If-statements and loops need to conditionally execute blocks
-    - Fix: Build Abstract Syntax Tree and add evaluation phase
+12. ✓ ~~**No AST for Deferred Execution**~~
+    - ~~File: `ᚠᚢᚦᛆᚱᚴ.y`~~
+    - ~~Issue: Current parser executes immediately, cannot support control flow~~
+    - ~~Impact: If-statements and loops need to conditionally execute blocks~~
+    - ~~Fix: Build Abstract Syntax Tree and add evaluation phase~~
+    - **FIXED:** Implemented as part of if-else statement implementation (issue #10). See that issue for full details on AST structure, node types, and evaluation phase.
 
 ### Usability Issues
 
