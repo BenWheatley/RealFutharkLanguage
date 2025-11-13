@@ -163,8 +163,27 @@ extern FILE *yyin, *yyout;
 #define EOB_ACT_END_OF_FILE 1
 #define EOB_ACT_LAST_MATCH 2
     
-    #define YY_LESS_LINENO(n)
-    #define YY_LINENO_REWIND_TO(ptr)
+    /* Note: We specifically omit the test for yy_rule_can_match_eol because it requires
+     *       access to the local variable yy_act. Since yyless() is a macro, it would break
+     *       existing scanners that call yyless() from OUTSIDE yylex.
+     *       One obvious solution it to make yy_act a global. I tried that, and saw
+     *       a 5% performance hit in a non-yylineno scanner, because yy_act is
+     *       normally declared as a register variable-- so it is not worth it.
+     */
+    #define  YY_LESS_LINENO(n) \
+            do { \
+                yy_size_t yyl;\
+                for ( yyl = n; yyl < yyleng; ++yyl )\
+                    if ( yytext[yyl] == '\n' )\
+                        --yylineno;\
+            }while(0)
+    #define YY_LINENO_REWIND_TO(dst) \
+            do {\
+                const char *p;\
+                for ( p = yy_cp-1; p >= (dst); --p)\
+                    if ( *p == '\n' )\
+                        --yylineno;\
+            }while(0)
     
 /* Return all but the first "n" matched characters back to the input stream. */
 #define yyless(n) \
@@ -546,6 +565,12 @@ static const flex_int16_t yy_chk[297] =
 
     } ;
 
+/* Table of booleans, true if rule could match eol. */
+static const flex_int32_t yy_rule_can_match_eol[22] =
+    {   0,
+1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+    0, 0,     };
+
 static yy_state_type yy_last_accepting_state;
 static char *yy_last_accepting_cpos;
 
@@ -567,8 +592,8 @@ char *yytext;
 #include <string.h>
 
 int rune_to_number(const char *s);
-#line 570 "lex.yy.c"
-#line 571 "lex.yy.c"
+#line 595 "lex.yy.c"
+#line 596 "lex.yy.c"
 
 #define INITIAL 0
 
@@ -785,10 +810,10 @@ YY_DECL
 		}
 
 	{
-#line 12 "ᚠᚢᚦᛆᚱᚴ.lex"
+#line 13 "ᚠᚢᚦᛆᚱᚴ.lex"
 
 
-#line 791 "lex.yy.c"
+#line 816 "lex.yy.c"
 
 	while ( /*CONSTCOND*/1 )		/* loops until end-of-file is reached */
 		{
@@ -834,6 +859,16 @@ yy_find_action:
 
 		YY_DO_BEFORE_ACTION;
 
+		if ( yy_act != YY_END_OF_BUFFER && yy_rule_can_match_eol[yy_act] )
+			{
+			yy_size_t yyl;
+			for ( yyl = 0; yyl < yyleng; ++yyl )
+				if ( yytext[yyl] == '\n' )
+					
+    yylineno++;
+;
+			}
+
 do_action:	/* This label is used only to access EOF actions. */
 
 		switch ( yy_act )
@@ -848,12 +883,12 @@ do_action:	/* This label is used only to access EOF actions. */
 case 1:
 /* rule 1 can match eol */
 YY_RULE_SETUP
-#line 14 "ᚠᚢᚦᛆᚱᚴ.lex"
+#line 15 "ᚠᚢᚦᛆᚱᚴ.lex"
 ;   /* Ignore whitespace */
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
-#line 16 "ᚠᚢᚦᛆᚱᚴ.lex"
+#line 17 "ᚠᚢᚦᛆᚱᚴ.lex"
 { /* Matches numbers enclosed by Futhark rune dot-like divider */
     yylval.num = rune_to_number(yytext);
     return NUMBER;
@@ -861,92 +896,92 @@ YY_RULE_SETUP
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
-#line 21 "ᚠᚢᚦᛆᚱᚴ.lex"
+#line 22 "ᚠᚢᚦᛆᚱᚴ.lex"
 { return EQUAL; } /* Matches the "equals" symbol (double dot) */
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 23 "ᚠᚢᚦᛆᚱᚴ.lex"
+#line 24 "ᚠᚢᚦᛆᚱᚴ.lex"
 { return PLUS; } /* Matches the "plus" symbol */
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 25 "ᚠᚢᚦᛆᚱᚴ.lex"
+#line 26 "ᚠᚢᚦᛆᚱᚴ.lex"
 { return MINUS; } /* Matches the "minus" operator (mnus) */
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 27 "ᚠᚢᚦᛆᚱᚴ.lex"
+#line 28 "ᚠᚢᚦᛆᚱᚴ.lex"
 { return MULTIPLY; } /* Matches the "multiply" operator (sinnum) */
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 29 "ᚠᚢᚦᛆᚱᚴ.lex"
+#line 30 "ᚠᚢᚦᛆᚱᚴ.lex"
 { return DIVIDE; } /* Matches the "divide" operator (deilt með) */
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 31 "ᚠᚢᚦᛆᚱᚴ.lex"
+#line 32 "ᚠᚢᚦᛆᚱᚴ.lex"
 { return LBRACKET; } /* Left bracket for grouping */
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 33 "ᚠᚢᚦᛆᚱᚴ.lex"
+#line 34 "ᚠᚢᚦᛆᚱᚴ.lex"
 { return RBRACKET; } /* Right bracket for grouping */
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
-#line 35 "ᚠᚢᚦᛆᚱᚴ.lex"
+#line 36 "ᚠᚢᚦᛆᚱᚴ.lex"
 { return GTE; } /* Greater than or equal (meir jafn) */
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 37 "ᚠᚢᚦᛆᚱᚴ.lex"
+#line 38 "ᚠᚢᚦᛆᚱᚴ.lex"
 { return LTE; } /* Less than or equal (minn jafn) */
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
-#line 39 "ᚠᚢᚦᛆᚱᚴ.lex"
+#line 40 "ᚠᚢᚦᛆᚱᚴ.lex"
 { return CMP_EQ; } /* Equal comparison (jafn) */
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
-#line 41 "ᚠᚢᚦᛆᚱᚴ.lex"
+#line 42 "ᚠᚢᚦᛆᚱᚴ.lex"
 { return CMP_NEQ; } /* Not equal (eigi) */
 	YY_BREAK
 case 14:
 YY_RULE_SETUP
-#line 43 "ᚠᚢᚦᛆᚱᚴ.lex"
+#line 44 "ᚠᚢᚦᛆᚱᚴ.lex"
 { return GT; } /* Greater than (meir) */
 	YY_BREAK
 case 15:
 YY_RULE_SETUP
-#line 45 "ᚠᚢᚦᛆᚱᚴ.lex"
+#line 46 "ᚠᚢᚦᛆᚱᚴ.lex"
 { return LT; } /* Less than (minn) */
 	YY_BREAK
 case 16:
 YY_RULE_SETUP
-#line 47 "ᚠᚢᚦᛆᚱᚴ.lex"
+#line 48 "ᚠᚢᚦᛆᚱᚴ.lex"
 { return IF; } /* If keyword (ef) */
 	YY_BREAK
 case 17:
 YY_RULE_SETUP
-#line 49 "ᚠᚢᚦᛆᚱᚴ.lex"
+#line 50 "ᚠᚢᚦᛆᚱᚴ.lex"
 { return ELSE; } /* Else keyword (annað) */
 	YY_BREAK
 case 18:
 YY_RULE_SETUP
-#line 51 "ᚠᚢᚦᛆᚱᚴ.lex"
+#line 52 "ᚠᚢᚦᛆᚱᚴ.lex"
 { return WHILE; } /* While keyword (while) */
 	YY_BREAK
 case 19:
 YY_RULE_SETUP
-#line 53 "ᚠᚢᚦᛆᚱᚴ.lex"
+#line 54 "ᚠᚢᚦᛆᚱᚴ.lex"
 { return END; } /* End keyword (enda) */
 	YY_BREAK
 case 20:
 YY_RULE_SETUP
-#line 55 "ᚠᚢᚦᛆᚱᚴ.lex"
+#line 56 "ᚠᚢᚦᛆᚱᚴ.lex"
 { /* Matches identifiers: UTF-8 runes U+16A0-U+16F8 */
     yylval.id = strdup(yytext);
     return IDENTIFIER;
@@ -954,10 +989,10 @@ YY_RULE_SETUP
 	YY_BREAK
 case 21:
 YY_RULE_SETUP
-#line 60 "ᚠᚢᚦᛆᚱᚴ.lex"
+#line 61 "ᚠᚢᚦᛆᚱᚴ.lex"
 ECHO;
 	YY_BREAK
-#line 960 "lex.yy.c"
+#line 995 "lex.yy.c"
 case YY_STATE_EOF(INITIAL):
 	yyterminate();
 
@@ -1325,6 +1360,10 @@ static int yy_get_next_buffer (void)
 
 	*--yy_cp = (char) c;
 
+    if ( c == '\n' ){
+        --yylineno;
+    }
+
 	(yytext_ptr) = yy_bp;
 	(yy_hold_char) = *yy_cp;
 	(yy_c_buf_p) = yy_cp;
@@ -1401,6 +1440,11 @@ static int yy_get_next_buffer (void)
 	c = *(unsigned char *) (yy_c_buf_p);	/* cast for 8-bit char's */
 	*(yy_c_buf_p) = '\0';	/* preserve yytext */
 	(yy_hold_char) = *++(yy_c_buf_p);
+
+	if ( c == '\n' )
+		
+    yylineno++;
+;
 
 	return c;
 }
@@ -1868,6 +1912,9 @@ static int yy_init_globals (void)
      * This function is called from yylex_destroy(), so don't allocate here.
      */
 
+    /* We do not touch yylineno unless the option is enabled. */
+    yylineno =  1;
+    
     (yy_buffer_stack) = NULL;
     (yy_buffer_stack_top) = 0;
     (yy_buffer_stack_max) = 0;
@@ -1962,12 +2009,14 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 60 "ᚠᚢᚦᛆᚱᚴ.lex"
+#line 61 "ᚠᚢᚦᛆᚱᚴ.lex"
 
 
 /* Convert Futhark rune numbers to their numeric equivalent */
 int rune_to_number(const char *s) {
     int value = 0;
+    const char *original = s;
+
     /* Skip the leading rune '᛫' (U+16EB, 3 bytes in UTF-8: E1 9B AB) */
     s += 3;
 
@@ -1988,9 +2037,11 @@ int rune_to_number(const char *s) {
                 value += (third_byte - 0xA0);
                 s += 3;
             } else {
+                fprintf(stderr, "Lexer error: Invalid rune in number: %s\n", original);
                 return -1;  /* Invalid rune */
             }
         } else {
+            fprintf(stderr, "Lexer error: Invalid rune in number: %s\n", original);
             return -1;  /* Invalid rune */
         }
     }

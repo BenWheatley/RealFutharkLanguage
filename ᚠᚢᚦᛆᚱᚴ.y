@@ -61,6 +61,11 @@ typedef struct ASTNode {
 // Declare yylex and yyerror
 int yylex(void);
 void yyerror(const char *s);
+extern int yylineno;  // Line number from lexer
+extern char *yytext;  // Current token text from lexer
+
+// Global for current filename
+const char *current_filename = NULL;
 
 // Symbol table functions
 void store_variable(const char *name, int value);
@@ -188,12 +193,15 @@ int main(int argc, char **argv) {
 
     // Check if a file argument was provided
     if (argc > 1) {
+        current_filename = argv[1];
         input_file = fopen(argv[1], "r");
         if (input_file == NULL) {
             fprintf(stderr, "Error: Cannot open file '%s': %s\n", argv[1], strerror(errno));
             return 1;
         }
         yyin = input_file;
+    } else {
+        current_filename = "<stdin>";
     }
     // Otherwise, yyin defaults to stdin
 
@@ -208,7 +216,29 @@ int main(int argc, char **argv) {
 }
 
 void yyerror(const char *s) {
-    fprintf(stderr, "Error: %s\n", s);
+    if (current_filename) {
+        fprintf(stderr, "%s:%d: error: %s\n", current_filename, yylineno, s);
+    } else {
+        fprintf(stderr, "line %d: error: %s\n", yylineno, s);
+    }
+
+    // Add hint about nearby token if available
+    if (yytext && yytext[0] != '\0') {
+        // For UTF-8 runes, show hex bytes
+        if ((unsigned char)yytext[0] >= 0x80) {
+            fprintf(stderr, "  near token: ");
+            for (int i = 0; i < 12 && yytext[i] != '\0'; i++) {
+                if (i > 0 && (unsigned char)yytext[i] >= 0x80 &&
+                    ((unsigned char)yytext[i] & 0xC0) != 0x80) {
+                    fprintf(stderr, " ");
+                }
+                fprintf(stderr, "%c", yytext[i]);
+            }
+            fprintf(stderr, "\n");
+        } else {
+            fprintf(stderr, "  near token: '%s'\n", yytext);
+        }
+    }
 }
 
 /* Store a variable in the symbol table */
@@ -249,8 +279,19 @@ int lookup(const char *name) {
         sym = sym->next;
     }
 
-    // Variable not found
-    fprintf(stderr, "Error: Undefined variable '%s'\n", name);
+    // Variable not found - provide helpful error message
+    if (current_filename) {
+        fprintf(stderr, "%s: runtime error: Undefined variable '", current_filename);
+    } else {
+        fprintf(stderr, "runtime error: Undefined variable '");
+    }
+
+    // Print variable name (runes)
+    for (int i = 0; name[i] != '\0'; i++) {
+        fprintf(stderr, "%c", name[i]);
+    }
+    fprintf(stderr, "'\n");
+
     return 0; // Return 0 for undefined variables
 }
 
@@ -391,7 +432,11 @@ int evaluate_ast(ASTNode *node) {
                 case '*': return left * right;
                 case '/':
                     if (right == 0) {
-                        fprintf(stderr, "Error: Division by zero\n");
+                        if (current_filename) {
+                            fprintf(stderr, "%s: runtime error: Division by zero\n", current_filename);
+                        } else {
+                            fprintf(stderr, "runtime error: Division by zero\n");
+                        }
                         return 0;
                     }
                     return left / right;

@@ -117,16 +117,18 @@ This is an April Fool's joke programming language that uses Futhark runes (Old N
     - ~~Fix: Add command-line argument for file input~~
     - **FIXED:** Modified `main(int argc, char **argv)` to accept file path as command-line argument. If argument provided, opens file and sets `yyin`. Proper error handling with `strerror(errno)` for file open failures. Falls back to stdin if no argument provided. Tested successfully with `.ᚠᚢᚦᛆᚱᚴ` files.
 
-14. **Poor Error Messages**
-    - File: `ᚠᚢᚦᛆᚱᚴ.y:55-57`
-    - Issue: `yyerror()` only prints generic "Error: ..." message
-    - Impact: Difficult to debug programs
-    - Fix: Add line numbers, token information, and context
+14. ✓ ~~**Poor Error Messages**~~
+    - ~~File: `ᚠᚢᚦᛆᚱᚴ.y:55-57`~~
+    - ~~Issue: `yyerror()` only prints generic "Error: ..." message~~
+    - ~~Impact: Difficult to debug programs~~
+    - ~~Fix: Add line numbers, token information, and context~~
+    - **FIXED:** Implemented comprehensive error reporting system. Added `%option yylineno` to lexer for automatic line number tracking. Added `current_filename` global to track source file name (shows "<stdin>" for interactive input). Updated `yyerror()` to display errors in standard format: `filename:line: error: message`. Added "near token" hints that show the problematic token with UTF-8 rune support. Updated runtime errors (undefined variables, division by zero) to include filename context. All error messages now provide clear location information for debugging. Tested with syntax errors, undefined variables, and division by zero - all show proper file:line context.
 
-15. **No Test Programs**
-    - Issue: No example programs to demonstrate the language
-    - Impact: Cannot verify implementation works correctly
-    - Fix: Create test files with various language features
+15. ✓ ~~**No Test Programs**~~
+    - ~~Issue: No example programs to demonstrate the language~~
+    - ~~Impact: Cannot verify implementation works correctly~~
+    - ~~Fix: Create test files with various language features~~
+    - **FIXED:** Created comprehensive test suite with 12 test files covering all language features: `simple.ᚠᚢᚦᛆᚱᚴ` (arithmetic operations), `test.ᚠᚢᚦᛆᚱᚴ` (variable multiplication), `if_simple.ᚠᚢᚦᛆᚱᚴ` (if statement), `if_else_test.ᚠᚢᚦᛆᚱᚴ` (if-else), `comprehensive_test.ᚠᚢᚦᛆᚱᚴ` (all features), `while_test.ᚠᚢᚦᛆᚱᚴ` (while loop), `nested_test.ᚠᚢᚦᛆᚱᚴ` (nested if inside while), `factorial.ᚠᚢᚦᛆᚱᚴ` (factorial calculation), and 4 error test files demonstrating undefined variables, syntax errors, division by zero, and other error conditions. All tests pass successfully.
 
 16. **No Documentation**
     - Issue: Only BNF spec exists, no usage guide

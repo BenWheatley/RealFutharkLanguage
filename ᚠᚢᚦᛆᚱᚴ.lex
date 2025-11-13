@@ -8,6 +8,7 @@ int rune_to_number(const char *s);
 
 %option 8bit
 %option noyywrap
+%option yylineno
 
 %%
 
@@ -62,6 +63,8 @@ int rune_to_number(const char *s);
 /* Convert Futhark rune numbers to their numeric equivalent */
 int rune_to_number(const char *s) {
     int value = 0;
+    const char *original = s;
+
     /* Skip the leading rune '᛫' (U+16EB, 3 bytes in UTF-8: E1 9B AB) */
     s += 3;
 
@@ -82,9 +85,11 @@ int rune_to_number(const char *s) {
                 value += (third_byte - 0xA0);
                 s += 3;
             } else {
+                fprintf(stderr, "Lexer error: Invalid rune in number: %s\n", original);
                 return -1;  /* Invalid rune */
             }
         } else {
+            fprintf(stderr, "Lexer error: Invalid rune in number: %s\n", original);
             return -1;  /* Invalid rune */
         }
     }

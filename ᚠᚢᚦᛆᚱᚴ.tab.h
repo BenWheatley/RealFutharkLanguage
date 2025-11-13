@@ -86,7 +86,7 @@
 
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 typedef union YYSTYPE
-#line 84 "ᚠᚢᚦᛆᚱᚴ.y"
+#line 89 "ᚠᚢᚦᛆᚱᚴ.y"
 {
     int num;       // Integer values for numbers
     char *id;     // String values for identifiers

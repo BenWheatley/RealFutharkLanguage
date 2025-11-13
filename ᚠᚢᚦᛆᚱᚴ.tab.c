@@ -176,6 +176,11 @@ typedef struct ASTNode {
 // Declare yylex and yyerror
 int yylex(void);
 void yyerror(const char *s);
+extern int yylineno;  // Line number from lexer
+extern char *yytext;  // Current token text from lexer
+
+// Global for current filename
+const char *current_filename = NULL;
 
 // Symbol table functions
 void store_variable(const char *name, int value);
@@ -215,14 +220,14 @@ void free_ast(ASTNode *node);
 
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 typedef union YYSTYPE
-#line 84 "ᚠᚢᚦᛆᚱᚴ.y"
+#line 89 "ᚠᚢᚦᛆᚱᚴ.y"
 {
     int num;       // Integer values for numbers
     char *id;     // String values for identifiers
     struct ASTNode *ast;  // AST node pointers
 }
 /* Line 193 of yacc.c.  */
-#line 226 "ᚠᚢᚦᛆᚱᚴ.tab.c"
+#line 231 "ᚠᚢᚦᛆᚱᚴ.tab.c"
 	YYSTYPE;
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
 # define YYSTYPE_IS_DECLARED 1
@@ -235,7 +240,7 @@ typedef union YYSTYPE
 
 
 /* Line 216 of yacc.c.  */
-#line 239 "ᚠᚢᚦᛆᚱᚴ.tab.c"
+#line 244 "ᚠᚢᚦᛆᚱᚴ.tab.c"
 
 #ifdef short
 # undef short
@@ -529,9 +534,9 @@ static const yytype_int8 yyrhs[] =
 /* YYRLINE[YYN] -- source line where rule number YYN was defined.  */
 static const yytype_uint8 yyrline[] =
 {
-       0,   101,   101,   103,   115,   116,   117,   118,   119,   123,
-     129,   130,   131,   135,   136,   137,   141,   142,   143,   147,
-     148,   149,   150,   151,   152,   156,   159,   165,   171,   175
+       0,   106,   106,   108,   120,   121,   122,   123,   124,   128,
+     134,   135,   136,   140,   141,   142,   146,   147,   148,   152,
+     153,   154,   155,   156,   157,   161,   164,   170,   176,   180
 };
 #endif
 
@@ -1471,7 +1476,7 @@ yyreduce:
   switch (yyn)
     {
         case 3:
-#line 103 "ᚠᚢᚦᛆᚱᚴ.y"
+#line 108 "ᚠᚢᚦᛆᚱᚴ.y"
     {
         if ((yyvsp[(2) - (2)].ast)) {
             int result = evaluate_ast((yyvsp[(2) - (2)].ast));
@@ -1484,110 +1489,110 @@ yyreduce:
     break;
 
   case 9:
-#line 123 "ᚠᚢᚦᛆᚱᚴ.y"
+#line 128 "ᚠᚢᚦᛆᚱᚴ.y"
     {
         (yyval.ast) = create_assignment_node((yyvsp[(1) - (3)].id), (yyvsp[(3) - (3)].ast));
     ;}
     break;
 
   case 10:
-#line 129 "ᚠᚢᚦᛆᚱᚴ.y"
+#line 134 "ᚠᚢᚦᛆᚱᚴ.y"
     { (yyval.ast) = (yyvsp[(1) - (1)].ast); ;}
     break;
 
   case 11:
-#line 130 "ᚠᚢᚦᛆᚱᚴ.y"
+#line 135 "ᚠᚢᚦᛆᚱᚴ.y"
     { (yyval.ast) = create_binary_op_node('+', (yyvsp[(1) - (3)].ast), (yyvsp[(3) - (3)].ast)); ;}
     break;
 
   case 12:
-#line 131 "ᚠᚢᚦᛆᚱᚴ.y"
+#line 136 "ᚠᚢᚦᛆᚱᚴ.y"
     { (yyval.ast) = create_binary_op_node('-', (yyvsp[(1) - (3)].ast), (yyvsp[(3) - (3)].ast)); ;}
     break;
 
   case 13:
-#line 135 "ᚠᚢᚦᛆᚱᚴ.y"
+#line 140 "ᚠᚢᚦᛆᚱᚴ.y"
     { (yyval.ast) = (yyvsp[(1) - (1)].ast); ;}
     break;
 
   case 14:
-#line 136 "ᚠᚢᚦᛆᚱᚴ.y"
+#line 141 "ᚠᚢᚦᛆᚱᚴ.y"
     { (yyval.ast) = create_binary_op_node('*', (yyvsp[(1) - (3)].ast), (yyvsp[(3) - (3)].ast)); ;}
     break;
 
   case 15:
-#line 137 "ᚠᚢᚦᛆᚱᚴ.y"
+#line 142 "ᚠᚢᚦᛆᚱᚴ.y"
     { (yyval.ast) = create_binary_op_node('/', (yyvsp[(1) - (3)].ast), (yyvsp[(3) - (3)].ast)); ;}
     break;
 
   case 16:
-#line 141 "ᚠᚢᚦᛆᚱᚴ.y"
+#line 146 "ᚠᚢᚦᛆᚱᚴ.y"
     { (yyval.ast) = create_identifier_node((yyvsp[(1) - (1)].id)); ;}
     break;
 
   case 17:
-#line 142 "ᚠᚢᚦᛆᚱᚴ.y"
+#line 147 "ᚠᚢᚦᛆᚱᚴ.y"
     { (yyval.ast) = create_number_node((yyvsp[(1) - (1)].num)); ;}
     break;
 
   case 18:
-#line 143 "ᚠᚢᚦᛆᚱᚴ.y"
+#line 148 "ᚠᚢᚦᛆᚱᚴ.y"
     { (yyval.ast) = (yyvsp[(2) - (3)].ast); ;}
     break;
 
   case 19:
-#line 147 "ᚠᚢᚦᛆᚱᚴ.y"
+#line 152 "ᚠᚢᚦᛆᚱᚴ.y"
     { (yyval.ast) = create_binary_op_node('=', (yyvsp[(1) - (3)].ast), (yyvsp[(3) - (3)].ast)); ;}
     break;
 
   case 20:
-#line 148 "ᚠᚢᚦᛆᚱᚴ.y"
+#line 153 "ᚠᚢᚦᛆᚱᚴ.y"
     { (yyval.ast) = create_binary_op_node('!', (yyvsp[(1) - (3)].ast), (yyvsp[(3) - (3)].ast)); ;}
     break;
 
   case 21:
-#line 149 "ᚠᚢᚦᛆᚱᚴ.y"
+#line 154 "ᚠᚢᚦᛆᚱᚴ.y"
     { (yyval.ast) = create_binary_op_node('>', (yyvsp[(1) - (3)].ast), (yyvsp[(3) - (3)].ast)); ;}
     break;
 
   case 22:
-#line 150 "ᚠᚢᚦᛆᚱᚴ.y"
+#line 155 "ᚠᚢᚦᛆᚱᚴ.y"
     { (yyval.ast) = create_binary_op_node('<', (yyvsp[(1) - (3)].ast), (yyvsp[(3) - (3)].ast)); ;}
     break;
 
   case 23:
-#line 151 "ᚠᚢᚦᛆᚱᚴ.y"
+#line 156 "ᚠᚢᚦᛆᚱᚴ.y"
     { (yyval.ast) = create_binary_op_node('G', (yyvsp[(1) - (3)].ast), (yyvsp[(3) - (3)].ast)); ;}
     break;
 
   case 24:
-#line 152 "ᚠᚢᚦᛆᚱᚴ.y"
+#line 157 "ᚠᚢᚦᛆᚱᚴ.y"
     { (yyval.ast) = create_binary_op_node('L', (yyvsp[(1) - (3)].ast), (yyvsp[(3) - (3)].ast)); ;}
     break;
 
   case 25:
-#line 156 "ᚠᚢᚦᛆᚱᚴ.y"
+#line 161 "ᚠᚢᚦᛆᚱᚴ.y"
     {
         (yyval.ast) = create_if_node((yyvsp[(2) - (4)].ast), (yyvsp[(3) - (4)].ast), NULL);
     ;}
     break;
 
   case 26:
-#line 159 "ᚠᚢᚦᛆᚱᚴ.y"
+#line 164 "ᚠᚢᚦᛆᚱᚴ.y"
     {
         (yyval.ast) = create_if_node((yyvsp[(2) - (6)].ast), (yyvsp[(3) - (6)].ast), (yyvsp[(5) - (6)].ast));
     ;}
     break;
 
   case 27:
-#line 165 "ᚠᚢᚦᛆᚱᚴ.y"
+#line 170 "ᚠᚢᚦᛆᚱᚴ.y"
     {
         (yyval.ast) = create_while_node((yyvsp[(2) - (4)].ast), (yyvsp[(3) - (4)].ast));
     ;}
     break;
 
   case 28:
-#line 171 "ᚠᚢᚦᛆᚱᚴ.y"
+#line 176 "ᚠᚢᚦᛆᚱᚴ.y"
     {
         (yyval.ast) = create_block_node();
         block_add_statement((yyval.ast), (yyvsp[(1) - (1)].ast));
@@ -1595,7 +1600,7 @@ yyreduce:
     break;
 
   case 29:
-#line 175 "ᚠᚢᚦᛆᚱᚴ.y"
+#line 180 "ᚠᚢᚦᛆᚱᚴ.y"
     {
         block_add_statement((yyvsp[(1) - (2)].ast), (yyvsp[(2) - (2)].ast));
         (yyval.ast) = (yyvsp[(1) - (2)].ast);
@@ -1604,7 +1609,7 @@ yyreduce:
 
 
 /* Line 1267 of yacc.c.  */
-#line 1608 "ᚠᚢᚦᛆᚱᚴ.tab.c"
+#line 1613 "ᚠᚢᚦᛆᚱᚴ.tab.c"
       default: break;
     }
   YY_SYMBOL_PRINT ("-> $$ =", yyr1[yyn], &yyval, &yyloc);
@@ -1818,7 +1823,7 @@ yyreturn:
 }
 
 
-#line 181 "ᚠᚢᚦᛆᚱᚴ.y"
+#line 186 "ᚠᚢᚦᛆᚱᚴ.y"
 
 
 // External flex variable for input file
@@ -1829,12 +1834,15 @@ int main(int argc, char **argv) {
 
     // Check if a file argument was provided
     if (argc > 1) {
+        current_filename = argv[1];
         input_file = fopen(argv[1], "r");
         if (input_file == NULL) {
             fprintf(stderr, "Error: Cannot open file '%s': %s\n", argv[1], strerror(errno));
             return 1;
         }
         yyin = input_file;
+    } else {
+        current_filename = "<stdin>";
     }
     // Otherwise, yyin defaults to stdin
 
@@ -1849,7 +1857,29 @@ int main(int argc, char **argv) {
 }
 
 void yyerror(const char *s) {
-    fprintf(stderr, "Error: %s\n", s);
+    if (current_filename) {
+        fprintf(stderr, "%s:%d: error: %s\n", current_filename, yylineno, s);
+    } else {
+        fprintf(stderr, "line %d: error: %s\n", yylineno, s);
+    }
+
+    // Add hint about nearby token if available
+    if (yytext && yytext[0] != '\0') {
+        // For UTF-8 runes, show hex bytes
+        if ((unsigned char)yytext[0] >= 0x80) {
+            fprintf(stderr, "  near token: ");
+            for (int i = 0; i < 12 && yytext[i] != '\0'; i++) {
+                if (i > 0 && (unsigned char)yytext[i] >= 0x80 &&
+                    ((unsigned char)yytext[i] & 0xC0) != 0x80) {
+                    fprintf(stderr, " ");
+                }
+                fprintf(stderr, "%c", yytext[i]);
+            }
+            fprintf(stderr, "\n");
+        } else {
+            fprintf(stderr, "  near token: '%s'\n", yytext);
+        }
+    }
 }
 
 /* Store a variable in the symbol table */
@@ -1890,8 +1920,19 @@ int lookup(const char *name) {
         sym = sym->next;
     }
 
-    // Variable not found
-    fprintf(stderr, "Error: Undefined variable '%s'\n", name);
+    // Variable not found - provide helpful error message
+    if (current_filename) {
+        fprintf(stderr, "%s: runtime error: Undefined variable '", current_filename);
+    } else {
+        fprintf(stderr, "runtime error: Undefined variable '");
+    }
+
+    // Print variable name (runes)
+    for (int i = 0; name[i] != '\0'; i++) {
+        fprintf(stderr, "%c", name[i]);
+    }
+    fprintf(stderr, "'\n");
+
     return 0; // Return 0 for undefined variables
 }
 
@@ -2032,7 +2073,11 @@ int evaluate_ast(ASTNode *node) {
                 case '*': return left * right;
                 case '/':
                     if (right == 0) {
-                        fprintf(stderr, "Error: Division by zero\n");
+                        if (current_filename) {
+                            fprintf(stderr, "%s: runtime error: Division by zero\n", current_filename);
+                        } else {
+                            fprintf(stderr, "runtime error: Division by zero\n");
+                        }
                         return 0;
                     }
                     return left / right;
