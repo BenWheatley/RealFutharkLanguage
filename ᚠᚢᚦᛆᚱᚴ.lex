@@ -44,7 +44,13 @@ int rune_to_number(const char *s);
 
 "ᛗᛁᚾ"         { return LT; } /* Less than (minn) */
 
-[ᚠ-ᛸ]+    { /* Matches identifiers composed of Futhark runes */
+"ᛖᚠ"           { return IF; } /* If keyword (ef) */
+
+"ᚨᚾᚾᚨᚦ"       { return ELSE; } /* Else keyword (annað) */
+
+"ᛖᚾᛞᚨ"        { return END; } /* End keyword (enda) */
+
+(\341\232[\240-\277]|\341\233[\200-\270])+    { /* Matches identifiers: UTF-8 runes U+16A0-U+16F8 */
     yylval.id = strdup(yytext);
     return IDENTIFIER;
 }

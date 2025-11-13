@@ -53,7 +53,10 @@
      GT = 269,
      LT = 270,
      GTE = 271,
-     LTE = 272
+     LTE = 272,
+     IF = 273,
+     ELSE = 274,
+     END = 275
    };
 #endif
 /* Tokens.  */
@@ -72,19 +75,23 @@
 #define LT 270
 #define GTE 271
 #define LTE 272
+#define IF 273
+#define ELSE 274
+#define END 275
 
 
 
 
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 typedef union YYSTYPE
-#line 28 "ᚠᚢᚦᛆᚱᚴ.y"
+#line 78 "ᚠᚢᚦᛆᚱᚴ.y"
 {
     int num;       // Integer values for numbers
     char *id;     // String values for identifiers
+    struct ASTNode *ast;  // AST node pointers
 }
 /* Line 1529 of yacc.c.  */
-#line 88 "ᚠᚢᚦᛆᚱᚴ.tab.h"
+#line 95 "ᚠᚢᚦᛆᚱᚴ.tab.h"
 	YYSTYPE;
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
 # define YYSTYPE_IS_DECLARED 1

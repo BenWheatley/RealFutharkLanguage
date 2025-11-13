@@ -87,11 +87,12 @@ This is an April Fool's joke programming language that uses Futhark runes (Old N
    - ~~Fix: Add all comparison operator tokens and condition evaluation~~
    - **FIXED:** Implemented all six comparison operators using short Icelandic words in runes: `ᛃᚠᚾ` (==), `ᛖᛁᚴᛁ` (!=), `ᛗᛖᛁᚱ` (>), `ᛗᛁᚾ` (<), `ᛗᛖᛁᚱ᛬ᛃᚠᚾ` (>=), `ᛗᛁᚾ᛬ᛃᚠᚾ` (<=). Added `condition` grammar rule that evaluates comparisons and returns 1 for true, 0 for false. All operators tested successfully with numbers, variables, and expressions.
 
-10. **No If-Else Statements**
-    - Files: `ᚠᚢᚦᛆᚱᚴ.lex` and `ᚠᚢᚦᛆᚱᚴ.y`
-    - Issue: BNF defines if-else, but no keywords or grammar rules exist
-    - Impact: No conditional branching possible
-    - Fix: Add keywords ᛖᚠ, ᚨᚾᚾᚨᚦ, ᛖᚾᛞᚨ and implement if-else logic
+10. ✓ ~~**No If-Else Statements**~~
+    - ~~Files: `ᚠᚢᚦᛆᚱᚴ.lex` and `ᚠᚢᚦᛆᚱᚴ.y`~~
+    - ~~Issue: BNF defines if-else, but no keywords or grammar rules exist~~
+    - ~~Impact: No conditional branching possible~~
+    - ~~Fix: Add keywords ᛖᚠ, ᚨᚾᚾᚨᚦ, ᛖᚾᛞᚨ and implement if-else logic~~
+    - **FIXED:** Implemented complete if-else statement support. Added keywords to lexer: `ᛖᚠ` (if), `ᚨᚾᚾᚨᚦ` (else), `ᛖᚾᛞᚨ` (end). Created Abstract Syntax Tree (AST) data structures with node types for numbers, identifiers, binary operations, assignments, if statements, and statement blocks. Rewrote parser grammar to build AST instead of immediate execution. Implemented AST evaluation with conditional execution support. Fixed identifier lexer pattern to properly capture full 3-byte UTF-8 rune sequences using octal escapes `(\341\232[\240-\277]|\341\233[\200-\270])+`. Both if-only and if-else branches tested successfully with correct conditional execution.
 
 11. **No While Loops**
     - Files: `ᚠᚢᚦᛆᚱᚴ.lex` and `ᚠᚢᚦᛆᚱᚴ.y`

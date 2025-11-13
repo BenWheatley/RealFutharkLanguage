@@ -80,7 +80,10 @@
      GT = 269,
      LT = 270,
      GTE = 271,
-     LTE = 272
+     LTE = 272,
+     IF = 273,
+     ELSE = 274,
+     END = 275
    };
 #endif
 /* Tokens.  */
@@ -99,6 +102,9 @@
 #define LT 270
 #define GTE 271
 #define LTE 272
+#define IF 273
+#define ELSE 274
+#define END 275
 
 
 
@@ -121,6 +127,45 @@ typedef struct symbol {
 // Global symbol table (linked list)
 Symbol *symbol_table = NULL;
 
+// AST node types
+typedef enum {
+    AST_NUMBER,
+    AST_IDENTIFIER,
+    AST_BINARY_OP,
+    AST_CONDITION,
+    AST_ASSIGNMENT,
+    AST_IF,
+    AST_BLOCK
+} ASTNodeType;
+
+// AST node structure
+typedef struct ASTNode {
+    ASTNodeType type;
+    union {
+        int number;
+        char *identifier;
+        struct {
+            char op;  // '+', '-', '*', '/', or comparison
+            struct ASTNode *left;
+            struct ASTNode *right;
+        } binary;
+        struct {
+            char *var_name;
+            struct ASTNode *expr;
+        } assignment;
+        struct {
+            struct ASTNode *condition;
+            struct ASTNode *then_block;
+            struct ASTNode *else_block;
+        } if_stmt;
+        struct {
+            struct ASTNode **statements;
+            int count;
+            int capacity;
+        } block;
+    } data;
+} ASTNode;
+
 // Declare yylex and yyerror
 int yylex(void);
 void yyerror(const char *s);
@@ -128,7 +173,18 @@ void yyerror(const char *s);
 // Symbol table functions
 void store_variable(const char *name, int value);
 int lookup(const char *name);
-int rune_to_number(const char *s); // Converts a Futhark rune sequence to a number
+int rune_to_number(const char *s);
+
+// AST functions
+ASTNode* create_number_node(int value);
+ASTNode* create_identifier_node(char *name);
+ASTNode* create_binary_op_node(char op, ASTNode *left, ASTNode *right);
+ASTNode* create_assignment_node(char *var_name, ASTNode *expr);
+ASTNode* create_if_node(ASTNode *condition, ASTNode *then_block, ASTNode *else_block);
+ASTNode* create_block_node();
+void block_add_statement(ASTNode *block, ASTNode *stmt);
+int evaluate_ast(ASTNode *node);
+void free_ast(ASTNode *node);
 
 
 /* Enabling traces.  */
@@ -151,13 +207,14 @@ int rune_to_number(const char *s); // Converts a Futhark rune sequence to a numb
 
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 typedef union YYSTYPE
-#line 28 "ᚠᚢᚦᛆᚱᚴ.y"
+#line 78 "ᚠᚢᚦᛆᚱᚴ.y"
 {
     int num;       // Integer values for numbers
     char *id;     // String values for identifiers
+    struct ASTNode *ast;  // AST node pointers
 }
 /* Line 193 of yacc.c.  */
-#line 161 "ᚠᚢᚦᛆᚱᚴ.tab.c"
+#line 218 "ᚠᚢᚦᛆᚱᚴ.tab.c"
 	YYSTYPE;
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
 # define YYSTYPE_IS_DECLARED 1
@@ -170,7 +227,7 @@ typedef union YYSTYPE
 
 
 /* Line 216 of yacc.c.  */
-#line 174 "ᚠᚢᚦᛆᚱᚴ.tab.c"
+#line 231 "ᚠᚢᚦᛆᚱᚴ.tab.c"
 
 #ifdef short
 # undef short
@@ -385,20 +442,20 @@ union yyalloc
 /* YYFINAL -- State number of the termination state.  */
 #define YYFINAL  2
 /* YYLAST -- Last index in YYTABLE.  */
-#define YYLAST   39
+#define YYLAST   62
 
 /* YYNTOKENS -- Number of terminals.  */
-#define YYNTOKENS  18
+#define YYNTOKENS  21
 /* YYNNTS -- Number of nonterminals.  */
-#define YYNNTS  8
+#define YYNNTS  10
 /* YYNRULES -- Number of rules.  */
-#define YYNRULES  22
+#define YYNRULES  27
 /* YYNRULES -- Number of states.  */
-#define YYNSTATES  37
+#define YYNSTATES  48
 
 /* YYTRANSLATE(YYLEX) -- Bison symbol number corresponding to YYLEX.  */
 #define YYUNDEFTOK  2
-#define YYMAXUTOK   272
+#define YYMAXUTOK   275
 
 #define YYTRANSLATE(YYX)						\
   ((unsigned int) (YYX) <= YYMAXUTOK ? yytranslate[YYX] : YYUNDEFTOK)
@@ -433,7 +490,7 @@ static const yytype_uint8 yytranslate[] =
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     1,     2,     3,     4,
        5,     6,     7,     8,     9,    10,    11,    12,    13,    14,
-      15,    16,    17
+      15,    16,    17,    18,    19,    20
 };
 
 #if YYDEBUG
@@ -441,29 +498,31 @@ static const yytype_uint8 yytranslate[] =
    YYRHS.  */
 static const yytype_uint8 yyprhs[] =
 {
-       0,     0,     3,     4,     7,     9,    11,    13,    17,    19,
-      23,    27,    29,    33,    37,    39,    41,    45,    49,    53,
-      57,    61,    65
+       0,     0,     3,     4,     7,     9,    11,    13,    15,    19,
+      21,    25,    29,    31,    35,    39,    41,    43,    47,    51,
+      55,    59,    63,    67,    71,    76,    83,    85
 };
 
 /* YYRHS -- A `-1'-separated list of the rules' RHS.  */
 static const yytype_int8 yyrhs[] =
 {
-      19,     0,    -1,    -1,    19,    20,    -1,    21,    -1,    22,
-      -1,    25,    -1,     3,     5,    22,    -1,    23,    -1,    22,
-       6,    23,    -1,    22,     7,    23,    -1,    24,    -1,    23,
-       8,    24,    -1,    23,     9,    24,    -1,     3,    -1,     4,
-      -1,    10,    22,    11,    -1,    22,    12,    22,    -1,    22,
-      13,    22,    -1,    22,    14,    22,    -1,    22,    15,    22,
-      -1,    22,    16,    22,    -1,    22,    17,    22,    -1
+      22,     0,    -1,    -1,    22,    23,    -1,    24,    -1,    25,
+      -1,    28,    -1,    29,    -1,     3,     5,    25,    -1,    26,
+      -1,    25,     6,    26,    -1,    25,     7,    26,    -1,    27,
+      -1,    26,     8,    27,    -1,    26,     9,    27,    -1,     3,
+      -1,     4,    -1,    10,    25,    11,    -1,    25,    12,    25,
+      -1,    25,    13,    25,    -1,    25,    14,    25,    -1,    25,
+      15,    25,    -1,    25,    16,    25,    -1,    25,    17,    25,
+      -1,    18,    28,    30,    20,    -1,    18,    28,    30,    19,
+      30,    20,    -1,    23,    -1,    30,    23,    -1
 };
 
 /* YYRLINE[YYN] -- source line where rule number YYN was defined.  */
 static const yytype_uint8 yyrline[] =
 {
-       0,    43,    43,    45,    49,    50,    51,    55,    64,    65,
-      66,    70,    71,    72,    76,    77,    78,    82,    83,    84,
-      85,    86,    87
+       0,    95,    95,    97,   109,   110,   111,   112,   116,   122,
+     123,   124,   128,   129,   130,   134,   135,   136,   140,   141,
+     142,   143,   144,   145,   149,   152,   158,   162
 };
 #endif
 
@@ -474,8 +533,9 @@ static const char *const yytname[] =
 {
   "$end", "error", "$undefined", "IDENTIFIER", "NUMBER", "EQUAL", "PLUS",
   "MINUS", "MULTIPLY", "DIVIDE", "LBRACKET", "RBRACKET", "CMP_EQ",
-  "CMP_NEQ", "GT", "LT", "GTE", "LTE", "$accept", "program", "statement",
-  "assignment", "expression", "term", "factor", "condition", 0
+  "CMP_NEQ", "GT", "LT", "GTE", "LTE", "IF", "ELSE", "END", "$accept",
+  "program", "statement", "assignment", "expression", "term", "factor",
+  "condition", "if_statement", "statement_list", 0
 };
 #endif
 
@@ -485,24 +545,25 @@ static const char *const yytname[] =
 static const yytype_uint16 yytoknum[] =
 {
        0,   256,   257,   258,   259,   260,   261,   262,   263,   264,
-     265,   266,   267,   268,   269,   270,   271,   272
+     265,   266,   267,   268,   269,   270,   271,   272,   273,   274,
+     275
 };
 # endif
 
 /* YYR1[YYN] -- Symbol number of symbol that rule YYN derives.  */
 static const yytype_uint8 yyr1[] =
 {
-       0,    18,    19,    19,    20,    20,    20,    21,    22,    22,
-      22,    23,    23,    23,    24,    24,    24,    25,    25,    25,
-      25,    25,    25
+       0,    21,    22,    22,    23,    23,    23,    23,    24,    25,
+      25,    25,    26,    26,    26,    27,    27,    27,    28,    28,
+      28,    28,    28,    28,    29,    29,    30,    30
 };
 
 /* YYR2[YYN] -- Number of symbols composing right hand side of rule YYN.  */
 static const yytype_uint8 yyr2[] =
 {
-       0,     2,     0,     2,     1,     1,     1,     3,     1,     3,
-       3,     1,     3,     3,     1,     1,     3,     3,     3,     3,
-       3,     3,     3
+       0,     2,     0,     2,     1,     1,     1,     1,     3,     1,
+       3,     3,     1,     3,     3,     1,     1,     3,     3,     3,
+       3,     3,     3,     3,     4,     6,     1,     2
 };
 
 /* YYDEFACT[STATE-NAME] -- Default rule to reduce with in state
@@ -510,33 +571,35 @@ static const yytype_uint8 yyr2[] =
    means the default is an error.  */
 static const yytype_uint8 yydefact[] =
 {
-       2,     0,     1,    14,    15,     0,     3,     4,     5,     8,
-      11,     6,     0,    14,     0,     0,     0,     0,     0,     0,
-       0,     0,     0,     0,     0,     7,    16,     9,    10,    17,
-      18,    19,    20,    21,    22,    12,    13
+       2,     0,     1,    15,    16,     0,     0,     3,     4,     5,
+       9,    12,     6,     7,     0,    15,     0,     0,     0,     0,
+       0,     0,     0,     0,     0,     0,     0,     0,     0,     8,
+      17,    26,     0,    10,    11,    18,    19,    20,    21,    22,
+      23,    13,    14,     0,    24,    27,     0,    25
 };
 
 /* YYDEFGOTO[NTERM-NUM].  */
 static const yytype_int8 yydefgoto[] =
 {
-      -1,     1,     6,     7,     8,     9,    10,    11
+      -1,     1,    31,     8,     9,    10,    11,    12,    13,    32
 };
 
 /* YYPACT[STATE-NUM] -- Index in YYTABLE of the portion describing
    STATE-NUM.  */
-#define YYPACT_NINF -6
+#define YYPACT_NINF -20
 static const yytype_int8 yypact[] =
 {
-      -6,     1,    -6,     3,    -6,    -1,    -6,    -6,    12,    13,
-      -6,    -6,    -1,    -6,    24,    -1,    -1,    -1,    -1,    -1,
-      -1,    -1,    -1,    -1,    -1,    26,    -6,    13,    13,    26,
-      26,    26,    26,    26,    26,    -6,    -6
+     -20,     5,   -20,     9,   -20,     3,     3,   -20,   -20,    43,
+      -5,   -20,   -20,   -20,     3,   -20,    27,    43,    44,     3,
+       3,     3,     3,     3,     3,     3,     3,     3,     3,    21,
+     -20,   -20,    22,    -5,    -5,    21,    21,    21,    21,    21,
+      21,   -20,   -20,    44,   -20,   -20,    26,   -20
 };
 
 /* YYPGOTO[NTERM-NUM].  */
 static const yytype_int8 yypgoto[] =
 {
-      -6,    -6,    -6,    -6,    -5,    21,    15,    -6
+     -20,   -20,    -1,   -20,    -4,    -8,    24,    10,   -20,   -19
 };
 
 /* YYTABLE[YYPACT[STATE-NUM]].  What to do in state STATE-NUM.  If
@@ -546,28 +609,35 @@ static const yytype_int8 yypgoto[] =
 #define YYTABLE_NINF -1
 static const yytype_uint8 yytable[] =
 {
-      14,     2,    13,     4,     3,     4,     0,    25,    12,     5,
-       0,     5,    29,    30,    31,    32,    33,    34,    15,    16,
-       0,    23,    24,     0,    17,    18,    19,    20,    21,    22,
-      15,    16,    15,    16,     0,    26,    27,    28,    35,    36
+       7,    16,    17,    27,    28,     2,    15,     4,     3,     4,
+      29,    33,    34,     5,    14,     5,    18,    35,    36,    37,
+      38,    39,    40,     6,    46,     3,     4,    19,    20,     3,
+       4,    45,     5,    19,    20,     0,     5,     0,    30,     0,
+       6,    43,    44,     0,     6,    45,    47,     3,     4,    19,
+      20,    41,    42,     0,     5,    21,    22,    23,    24,    25,
+      26,     0,     6
 };
 
 static const yytype_int8 yycheck[] =
 {
-       5,     0,     3,     4,     3,     4,    -1,    12,     5,    10,
-      -1,    10,    17,    18,    19,    20,    21,    22,     6,     7,
-      -1,     8,     9,    -1,    12,    13,    14,    15,    16,    17,
-       6,     7,     6,     7,    -1,    11,    15,    16,    23,    24
+       1,     5,     6,     8,     9,     0,     3,     4,     3,     4,
+      14,    19,    20,    10,     5,    10,     6,    21,    22,    23,
+      24,    25,    26,    18,    43,     3,     4,     6,     7,     3,
+       4,    32,    10,     6,     7,    -1,    10,    -1,    11,    -1,
+      18,    19,    20,    -1,    18,    46,    20,     3,     4,     6,
+       7,    27,    28,    -1,    10,    12,    13,    14,    15,    16,
+      17,    -1,    18
 };
 
 /* YYSTOS[STATE-NUM] -- The (internal number of the) accessing
    symbol of state STATE-NUM.  */
 static const yytype_uint8 yystos[] =
 {
-       0,    19,     0,     3,     4,    10,    20,    21,    22,    23,
-      24,    25,     5,     3,    22,     6,     7,    12,    13,    14,
-      15,    16,    17,     8,     9,    22,    11,    23,    23,    22,
-      22,    22,    22,    22,    22,    24,    24
+       0,    22,     0,     3,     4,    10,    18,    23,    24,    25,
+      26,    27,    28,    29,     5,     3,    25,    25,    28,     6,
+       7,    12,    13,    14,    15,    16,    17,     8,     9,    25,
+      11,    23,    30,    26,    26,    25,    25,    25,    25,    25,
+      25,    27,    27,    19,    20,    23,    30,    20
 };
 
 #define yyerrok		(yyerrstatus = 0)
@@ -1381,104 +1451,134 @@ yyreduce:
   YY_REDUCE_PRINT (yyn);
   switch (yyn)
     {
-        case 5:
-#line 50 "ᚠᚢᚦᛆᚱᚴ.y"
-    { printf("Result: %d\n", (yyvsp[(1) - (1)].num)); ;}
-    break;
-
-  case 6:
-#line 51 "ᚠᚢᚦᛆᚱᚴ.y"
-    { printf("Result: %d\n", (yyvsp[(1) - (1)].num)); ;}
-    break;
-
-  case 7:
-#line 55 "ᚠᚢᚦᛆᚱᚴ.y"
+        case 3:
+#line 97 "ᚠᚢᚦᛆᚱᚴ.y"
     {
-        store_variable((yyvsp[(1) - (3)].id), (yyvsp[(3) - (3)].num));
-        printf("Assignment: %s = %d\n", (yyvsp[(1) - (3)].id), (yyvsp[(3) - (3)].num));
-        free((yyvsp[(1) - (3)].id));
-        (yyval.num) = (yyvsp[(3) - (3)].num);
+        if ((yyvsp[(2) - (2)].ast)) {
+            int result = evaluate_ast((yyvsp[(2) - (2)].ast));
+            if ((yyvsp[(2) - (2)].ast)->type != AST_ASSIGNMENT && (yyvsp[(2) - (2)].ast)->type != AST_IF) {
+                printf("Result: %d\n", result);
+            }
+            free_ast((yyvsp[(2) - (2)].ast));
+        }
     ;}
     break;
 
   case 8:
-#line 64 "ᚠᚢᚦᛆᚱᚴ.y"
-    { (yyval.num) = (yyvsp[(1) - (1)].num); ;}
+#line 116 "ᚠᚢᚦᛆᚱᚴ.y"
+    {
+        (yyval.ast) = create_assignment_node((yyvsp[(1) - (3)].id), (yyvsp[(3) - (3)].ast));
+    ;}
     break;
 
   case 9:
-#line 65 "ᚠᚢᚦᛆᚱᚴ.y"
-    { (yyval.num) = (yyvsp[(1) - (3)].num) + (yyvsp[(3) - (3)].num); ;}
+#line 122 "ᚠᚢᚦᛆᚱᚴ.y"
+    { (yyval.ast) = (yyvsp[(1) - (1)].ast); ;}
     break;
 
   case 10:
-#line 66 "ᚠᚢᚦᛆᚱᚴ.y"
-    { (yyval.num) = (yyvsp[(1) - (3)].num) - (yyvsp[(3) - (3)].num); ;}
+#line 123 "ᚠᚢᚦᛆᚱᚴ.y"
+    { (yyval.ast) = create_binary_op_node('+', (yyvsp[(1) - (3)].ast), (yyvsp[(3) - (3)].ast)); ;}
     break;
 
   case 11:
-#line 70 "ᚠᚢᚦᛆᚱᚴ.y"
-    { (yyval.num) = (yyvsp[(1) - (1)].num); ;}
+#line 124 "ᚠᚢᚦᛆᚱᚴ.y"
+    { (yyval.ast) = create_binary_op_node('-', (yyvsp[(1) - (3)].ast), (yyvsp[(3) - (3)].ast)); ;}
     break;
 
   case 12:
-#line 71 "ᚠᚢᚦᛆᚱᚴ.y"
-    { (yyval.num) = (yyvsp[(1) - (3)].num) * (yyvsp[(3) - (3)].num); ;}
+#line 128 "ᚠᚢᚦᛆᚱᚴ.y"
+    { (yyval.ast) = (yyvsp[(1) - (1)].ast); ;}
     break;
 
   case 13:
-#line 72 "ᚠᚢᚦᛆᚱᚴ.y"
-    { (yyval.num) = (yyvsp[(1) - (3)].num) / (yyvsp[(3) - (3)].num); ;}
+#line 129 "ᚠᚢᚦᛆᚱᚴ.y"
+    { (yyval.ast) = create_binary_op_node('*', (yyvsp[(1) - (3)].ast), (yyvsp[(3) - (3)].ast)); ;}
     break;
 
   case 14:
-#line 76 "ᚠᚢᚦᛆᚱᚴ.y"
-    { (yyval.num) = lookup((yyvsp[(1) - (1)].id)); free((yyvsp[(1) - (1)].id)); ;}
+#line 130 "ᚠᚢᚦᛆᚱᚴ.y"
+    { (yyval.ast) = create_binary_op_node('/', (yyvsp[(1) - (3)].ast), (yyvsp[(3) - (3)].ast)); ;}
     break;
 
   case 15:
-#line 77 "ᚠᚢᚦᛆᚱᚴ.y"
-    { (yyval.num) = (yyvsp[(1) - (1)].num); ;}
+#line 134 "ᚠᚢᚦᛆᚱᚴ.y"
+    { (yyval.ast) = create_identifier_node((yyvsp[(1) - (1)].id)); ;}
     break;
 
   case 16:
-#line 78 "ᚠᚢᚦᛆᚱᚴ.y"
-    { (yyval.num) = (yyvsp[(2) - (3)].num); ;}
+#line 135 "ᚠᚢᚦᛆᚱᚴ.y"
+    { (yyval.ast) = create_number_node((yyvsp[(1) - (1)].num)); ;}
     break;
 
   case 17:
-#line 82 "ᚠᚢᚦᛆᚱᚴ.y"
-    { (yyval.num) = ((yyvsp[(1) - (3)].num) == (yyvsp[(3) - (3)].num)) ? 1 : 0; ;}
+#line 136 "ᚠᚢᚦᛆᚱᚴ.y"
+    { (yyval.ast) = (yyvsp[(2) - (3)].ast); ;}
     break;
 
   case 18:
-#line 83 "ᚠᚢᚦᛆᚱᚴ.y"
-    { (yyval.num) = ((yyvsp[(1) - (3)].num) != (yyvsp[(3) - (3)].num)) ? 1 : 0; ;}
+#line 140 "ᚠᚢᚦᛆᚱᚴ.y"
+    { (yyval.ast) = create_binary_op_node('=', (yyvsp[(1) - (3)].ast), (yyvsp[(3) - (3)].ast)); ;}
     break;
 
   case 19:
-#line 84 "ᚠᚢᚦᛆᚱᚴ.y"
-    { (yyval.num) = ((yyvsp[(1) - (3)].num) > (yyvsp[(3) - (3)].num)) ? 1 : 0; ;}
+#line 141 "ᚠᚢᚦᛆᚱᚴ.y"
+    { (yyval.ast) = create_binary_op_node('!', (yyvsp[(1) - (3)].ast), (yyvsp[(3) - (3)].ast)); ;}
     break;
 
   case 20:
-#line 85 "ᚠᚢᚦᛆᚱᚴ.y"
-    { (yyval.num) = ((yyvsp[(1) - (3)].num) < (yyvsp[(3) - (3)].num)) ? 1 : 0; ;}
+#line 142 "ᚠᚢᚦᛆᚱᚴ.y"
+    { (yyval.ast) = create_binary_op_node('>', (yyvsp[(1) - (3)].ast), (yyvsp[(3) - (3)].ast)); ;}
     break;
 
   case 21:
-#line 86 "ᚠᚢᚦᛆᚱᚴ.y"
-    { (yyval.num) = ((yyvsp[(1) - (3)].num) >= (yyvsp[(3) - (3)].num)) ? 1 : 0; ;}
+#line 143 "ᚠᚢᚦᛆᚱᚴ.y"
+    { (yyval.ast) = create_binary_op_node('<', (yyvsp[(1) - (3)].ast), (yyvsp[(3) - (3)].ast)); ;}
     break;
 
   case 22:
-#line 87 "ᚠᚢᚦᛆᚱᚴ.y"
-    { (yyval.num) = ((yyvsp[(1) - (3)].num) <= (yyvsp[(3) - (3)].num)) ? 1 : 0; ;}
+#line 144 "ᚠᚢᚦᛆᚱᚴ.y"
+    { (yyval.ast) = create_binary_op_node('G', (yyvsp[(1) - (3)].ast), (yyvsp[(3) - (3)].ast)); ;}
+    break;
+
+  case 23:
+#line 145 "ᚠᚢᚦᛆᚱᚴ.y"
+    { (yyval.ast) = create_binary_op_node('L', (yyvsp[(1) - (3)].ast), (yyvsp[(3) - (3)].ast)); ;}
+    break;
+
+  case 24:
+#line 149 "ᚠᚢᚦᛆᚱᚴ.y"
+    {
+        (yyval.ast) = create_if_node((yyvsp[(2) - (4)].ast), (yyvsp[(3) - (4)].ast), NULL);
+    ;}
+    break;
+
+  case 25:
+#line 152 "ᚠᚢᚦᛆᚱᚴ.y"
+    {
+        (yyval.ast) = create_if_node((yyvsp[(2) - (6)].ast), (yyvsp[(3) - (6)].ast), (yyvsp[(5) - (6)].ast));
+    ;}
+    break;
+
+  case 26:
+#line 158 "ᚠᚢᚦᛆᚱᚴ.y"
+    {
+        (yyval.ast) = create_block_node();
+        block_add_statement((yyval.ast), (yyvsp[(1) - (1)].ast));
+    ;}
+    break;
+
+  case 27:
+#line 162 "ᚠᚢᚦᛆᚱᚴ.y"
+    {
+        block_add_statement((yyvsp[(1) - (2)].ast), (yyvsp[(2) - (2)].ast));
+        (yyval.ast) = (yyvsp[(1) - (2)].ast);
+    ;}
     break;
 
 
 /* Line 1267 of yacc.c.  */
-#line 1482 "ᚠᚢᚦᛆᚱᚴ.tab.c"
+#line 1582 "ᚠᚢᚦᛆᚱᚴ.tab.c"
       default: break;
     }
   YY_SYMBOL_PRINT ("-> $$ =", yyr1[yyn], &yyval, &yyloc);
@@ -1692,7 +1792,7 @@ yyreturn:
 }
 
 
-#line 90 "ᚠᚢᚦᛆᚱᚴ.y"
+#line 168 "ᚠᚢᚦᛆᚱᚴ.y"
 
 
 // External flex variable for input file
@@ -1767,5 +1867,219 @@ int lookup(const char *name) {
     // Variable not found
     fprintf(stderr, "Error: Undefined variable '%s'\n", name);
     return 0; // Return 0 for undefined variables
+}
+
+/* AST Creation Functions */
+
+ASTNode* create_number_node(int value) {
+    ASTNode *node = (ASTNode *)malloc(sizeof(ASTNode));
+    if (node == NULL) {
+        fprintf(stderr, "Error: Out of memory\n");
+        exit(1);
+    }
+    node->type = AST_NUMBER;
+    node->data.number = value;
+    return node;
+}
+
+ASTNode* create_identifier_node(char *name) {
+    ASTNode *node = (ASTNode *)malloc(sizeof(ASTNode));
+    if (node == NULL) {
+        fprintf(stderr, "Error: Out of memory\n");
+        exit(1);
+    }
+    node->type = AST_IDENTIFIER;
+    node->data.identifier = name;  // Takes ownership of the string
+    return node;
+}
+
+ASTNode* create_binary_op_node(char op, ASTNode *left, ASTNode *right) {
+    ASTNode *node = (ASTNode *)malloc(sizeof(ASTNode));
+    if (node == NULL) {
+        fprintf(stderr, "Error: Out of memory\n");
+        exit(1);
+    }
+    node->type = AST_BINARY_OP;
+    node->data.binary.op = op;
+    node->data.binary.left = left;
+    node->data.binary.right = right;
+    return node;
+}
+
+ASTNode* create_assignment_node(char *var_name, ASTNode *expr) {
+    ASTNode *node = (ASTNode *)malloc(sizeof(ASTNode));
+    if (node == NULL) {
+        fprintf(stderr, "Error: Out of memory\n");
+        exit(1);
+    }
+    node->type = AST_ASSIGNMENT;
+    node->data.assignment.var_name = var_name;  // Takes ownership
+    node->data.assignment.expr = expr;
+    return node;
+}
+
+ASTNode* create_if_node(ASTNode *condition, ASTNode *then_block, ASTNode *else_block) {
+    ASTNode *node = (ASTNode *)malloc(sizeof(ASTNode));
+    if (node == NULL) {
+        fprintf(stderr, "Error: Out of memory\n");
+        exit(1);
+    }
+    node->type = AST_IF;
+    node->data.if_stmt.condition = condition;
+    node->data.if_stmt.then_block = then_block;
+    node->data.if_stmt.else_block = else_block;
+    return node;
+}
+
+ASTNode* create_block_node() {
+    ASTNode *node = (ASTNode *)malloc(sizeof(ASTNode));
+    if (node == NULL) {
+        fprintf(stderr, "Error: Out of memory\n");
+        exit(1);
+    }
+    node->type = AST_BLOCK;
+    node->data.block.capacity = 4;  // Start with capacity for 4 statements
+    node->data.block.count = 0;
+    node->data.block.statements = (ASTNode **)malloc(sizeof(ASTNode *) * node->data.block.capacity);
+    if (node->data.block.statements == NULL) {
+        fprintf(stderr, "Error: Out of memory\n");
+        exit(1);
+    }
+    return node;
+}
+
+void block_add_statement(ASTNode *block, ASTNode *stmt) {
+    if (block->type != AST_BLOCK) {
+        fprintf(stderr, "Error: Attempting to add statement to non-block node\n");
+        return;
+    }
+
+    // Expand capacity if needed
+    if (block->data.block.count >= block->data.block.capacity) {
+        block->data.block.capacity *= 2;
+        block->data.block.statements = (ASTNode **)realloc(
+            block->data.block.statements,
+            sizeof(ASTNode *) * block->data.block.capacity
+        );
+        if (block->data.block.statements == NULL) {
+            fprintf(stderr, "Error: Out of memory\n");
+            exit(1);
+        }
+    }
+
+    block->data.block.statements[block->data.block.count++] = stmt;
+}
+
+/* AST Evaluation Function */
+
+int evaluate_ast(ASTNode *node) {
+    if (node == NULL) {
+        return 0;
+    }
+
+    switch (node->type) {
+        case AST_NUMBER:
+            return node->data.number;
+
+        case AST_IDENTIFIER:
+            return lookup(node->data.identifier);
+
+        case AST_BINARY_OP: {
+            int left = evaluate_ast(node->data.binary.left);
+            int right = evaluate_ast(node->data.binary.right);
+
+            switch (node->data.binary.op) {
+                case '+': return left + right;
+                case '-': return left - right;
+                case '*': return left * right;
+                case '/':
+                    if (right == 0) {
+                        fprintf(stderr, "Error: Division by zero\n");
+                        return 0;
+                    }
+                    return left / right;
+                case '=': return left == right ? 1 : 0;  // CMP_EQ
+                case '!': return left != right ? 1 : 0;  // CMP_NEQ
+                case '>': return left > right ? 1 : 0;   // GT
+                case '<': return left < right ? 1 : 0;   // LT
+                case 'G': return left >= right ? 1 : 0;  // GTE
+                case 'L': return left <= right ? 1 : 0;  // LTE
+                default:
+                    fprintf(stderr, "Error: Unknown operator '%c'\n", node->data.binary.op);
+                    return 0;
+            }
+        }
+
+        case AST_ASSIGNMENT: {
+            int value = evaluate_ast(node->data.assignment.expr);
+            store_variable(node->data.assignment.var_name, value);
+            return value;
+        }
+
+        case AST_IF: {
+            int condition = evaluate_ast(node->data.if_stmt.condition);
+            if (condition) {
+                return evaluate_ast(node->data.if_stmt.then_block);
+            } else if (node->data.if_stmt.else_block != NULL) {
+                return evaluate_ast(node->data.if_stmt.else_block);
+            }
+            return 0;
+        }
+
+        case AST_BLOCK: {
+            int result = 0;
+            for (int i = 0; i < node->data.block.count; i++) {
+                result = evaluate_ast(node->data.block.statements[i]);
+            }
+            return result;
+        }
+
+        default:
+            fprintf(stderr, "Error: Unknown AST node type\n");
+            return 0;
+    }
+}
+
+/* Free AST memory */
+
+void free_ast(ASTNode *node) {
+    if (node == NULL) {
+        return;
+    }
+
+    switch (node->type) {
+        case AST_NUMBER:
+            break;
+
+        case AST_IDENTIFIER:
+            free(node->data.identifier);
+            break;
+
+        case AST_BINARY_OP:
+        case AST_CONDITION:  // Conditions are stored as binary ops
+            free_ast(node->data.binary.left);
+            free_ast(node->data.binary.right);
+            break;
+
+        case AST_ASSIGNMENT:
+            free(node->data.assignment.var_name);
+            free_ast(node->data.assignment.expr);
+            break;
+
+        case AST_IF:
+            free_ast(node->data.if_stmt.condition);
+            free_ast(node->data.if_stmt.then_block);
+            free_ast(node->data.if_stmt.else_block);
+            break;
+
+        case AST_BLOCK:
+            for (int i = 0; i < node->data.block.count; i++) {
+                free_ast(node->data.block.statements[i]);
+            }
+            free(node->data.block.statements);
+            break;
+    }
+
+    free(node);
 }
 
