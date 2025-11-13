@@ -64,12 +64,12 @@ This is an April Fool's joke programming language that uses Futhark runes (Old N
    - ~~Fix: Implement symbol table (hash map) to store variable assignments~~
    - **FIXED:** Implemented linked-list symbol table with `store_variable()` and `lookup()` functions. Variables can now be stored, retrieved, and reassigned. Undefined variables return 0 with error message. Added `program` rule to parser to accept multiple statements. Tested successfully with multiple variables and expressions.
 
-7. ✓ ~~**Incomplete Arithmetic Operations (Minus/Multiply)**~~
+7. ✓ ~~**Incomplete Arithmetic Operations**~~
    - ~~Files: `ᚠᚢᚦᛆᚱᚴ.lex` and `ᚠᚢᚦᛆᚱᚴ.y`~~
    - ~~Issue: Only addition is implemented, missing subtraction, multiplication, division~~
    - ~~Impact: BNF spec promises full arithmetic but only + works~~
    - ~~Fix: Add tokens and grammar rules for -, *, / operators~~
-   - **FIXED (partial):** Added `ᛗᚾᚢᛊ` (minus) and `ᛊᛁᚾᚾᚢᛗ` (multiply) operators. Restructured grammar with proper precedence: expression (+ -), term (* /), factor (atoms). Multiplication has higher precedence than addition. Brackets override precedence. Division operator still pending (separate task). All tests pass with correct precedence.
+   - **FIXED:** Implemented all four arithmetic operators: `᛭` (+), `ᛗᚾᚢᛊ` (-), `ᛊᛁᚾᚾᚢᛗ` (*), `ᛞᛖᛁᛚᛏ᛬ᛗᛖᚦ` (/). Restructured grammar with proper precedence: expression (+ -), term (* /), factor (atoms). Multiplication and division have higher precedence than addition and subtraction. Brackets override precedence. Integer division truncates. All tests pass with correct precedence: 2+3*4=14, (2+3)*4=20, 32+8*3-16/4=52.
 
 8. ✓ ~~**No Expression Grouping**~~
    - ~~Files: `ᚠᚢᚦᛆᚱᚴ.lex` and `ᚠᚢᚦᛆᚱᚴ.y`~~
@@ -107,11 +107,12 @@ This is an April Fool's joke programming language that uses Futhark runes (Old N
 
 ### Usability Issues
 
-13. **No File Input Support**
-    - File: `ᚠᚢᚦᛆᚱᚴ.y:51-52`
-    - Issue: `main()` only reads from stdin via `yyparse()`
-    - Impact: Cannot load programs from files
-    - Fix: Add command-line argument for file input
+13. ✓ ~~**No File Input Support**~~
+    - ~~File: `ᚠᚢᚦᛆᚱᚴ.y:51-52`~~
+    - ~~Issue: `main()` only reads from stdin via `yyparse()`~~
+    - ~~Impact: Cannot load programs from files~~
+    - ~~Fix: Add command-line argument for file input~~
+    - **FIXED:** Modified `main(int argc, char **argv)` to accept file path as command-line argument. If argument provided, opens file and sets `yyin`. Proper error handling with `strerror(errno)` for file open failures. Falls back to stdin if no argument provided. Tested successfully with `.ᚠᚢᚦᛆᚱᚴ` files.
 
 14. **Poor Error Messages**
     - File: `ᚠᚢᚦᛆᚱᚴ.y:55-57`

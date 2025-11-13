@@ -26,6 +26,8 @@ int rune_to_number(const char *s);
 
 "ᛊᛁᚾᚾᚢᛗ"      { return MULTIPLY; } /* Matches the "multiply" operator (sinnum) */
 
+"ᛞᛖᛁᛚᛏ᛬ᛗᛖᚦ"  { return DIVIDE; } /* Matches the "divide" operator (deilt með) */
+
 "["            { return LBRACKET; } /* Left bracket for grouping */
 
 "]"            { return RBRACKET; } /* Right bracket for grouping */

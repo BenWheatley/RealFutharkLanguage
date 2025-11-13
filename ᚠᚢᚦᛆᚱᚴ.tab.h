@@ -45,14 +45,15 @@
      PLUS = 261,
      MINUS = 262,
      MULTIPLY = 263,
-     LBRACKET = 264,
-     RBRACKET = 265,
-     CMP_EQ = 266,
-     CMP_NEQ = 267,
-     GT = 268,
-     LT = 269,
-     GTE = 270,
-     LTE = 271
+     DIVIDE = 264,
+     LBRACKET = 265,
+     RBRACKET = 266,
+     CMP_EQ = 267,
+     CMP_NEQ = 268,
+     GT = 269,
+     LT = 270,
+     GTE = 271,
+     LTE = 272
    };
 #endif
 /* Tokens.  */
@@ -62,27 +63,28 @@
 #define PLUS 261
 #define MINUS 262
 #define MULTIPLY 263
-#define LBRACKET 264
-#define RBRACKET 265
-#define CMP_EQ 266
-#define CMP_NEQ 267
-#define GT 268
-#define LT 269
-#define GTE 270
-#define LTE 271
+#define DIVIDE 264
+#define LBRACKET 265
+#define RBRACKET 266
+#define CMP_EQ 267
+#define CMP_NEQ 268
+#define GT 269
+#define LT 270
+#define GTE 271
+#define LTE 272
 
 
 
 
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 typedef union YYSTYPE
-#line 27 "ᚠᚢᚦᛆᚱᚴ.y"
+#line 28 "ᚠᚢᚦᛆᚱᚴ.y"
 {
     int num;       // Integer values for numbers
     char *id;     // String values for identifiers
 }
 /* Line 1529 of yacc.c.  */
-#line 86 "ᚠᚢᚦᛆᚱᚴ.tab.h"
+#line 88 "ᚠᚢᚦᛆᚱᚴ.tab.h"
 	YYSTYPE;
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
 # define YYSTYPE_IS_DECLARED 1

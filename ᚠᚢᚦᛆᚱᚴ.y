@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <errno.h>
 
 // Symbol table entry structure
 typedef struct symbol {
@@ -32,7 +33,7 @@ int rune_to_number(const char *s); // Converts a Futhark rune sequence to a numb
 // Token declarations with types
 %token <id> IDENTIFIER
 %token <num> NUMBER
-%token EQUAL PLUS MINUS MULTIPLY LBRACKET RBRACKET
+%token EQUAL PLUS MINUS MULTIPLY DIVIDE LBRACKET RBRACKET
 %token CMP_EQ CMP_NEQ GT LT GTE LTE
 
 %type <num> statement assignment expression term factor condition
@@ -68,6 +69,7 @@ expression:
 term:
     factor { $$ = $1; }
     | term MULTIPLY factor { $$ = $1 * $3; }
+    | term DIVIDE factor { $$ = $1 / $3; }
     ;
 
 factor:
@@ -87,8 +89,31 @@ condition:
 
 %%
 
-int main(void) {
-    return yyparse();
+// External flex variable for input file
+extern FILE *yyin;
+
+int main(int argc, char **argv) {
+    FILE *input_file = NULL;
+
+    // Check if a file argument was provided
+    if (argc > 1) {
+        input_file = fopen(argv[1], "r");
+        if (input_file == NULL) {
+            fprintf(stderr, "Error: Cannot open file '%s': %s\n", argv[1], strerror(errno));
+            return 1;
+        }
+        yyin = input_file;
+    }
+    // Otherwise, yyin defaults to stdin
+
+    int result = yyparse();
+
+    // Close the file if we opened one
+    if (input_file != NULL) {
+        fclose(input_file);
+    }
+
+    return result;
 }
 
 void yyerror(const char *s) {
