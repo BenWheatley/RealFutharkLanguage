@@ -70,6 +70,7 @@ const char *current_filename = NULL;
 // Symbol table functions
 void store_variable(const char *name, int value);
 int lookup(const char *name);
+void cleanup_symbol_table(void);
 int rune_to_number(const char *s);
 
 // AST functions
@@ -212,6 +213,9 @@ int main(int argc, char **argv) {
         fclose(input_file);
     }
 
+    // Clean up symbol table before exit
+    cleanup_symbol_table();
+
     return result;
 }
 
@@ -293,6 +297,18 @@ int lookup(const char *name) {
     fprintf(stderr, "'\n");
 
     return 0; // Return 0 for undefined variables
+}
+
+/* Clean up symbol table and free all memory */
+void cleanup_symbol_table(void) {
+    Symbol *current = symbol_table;
+    while (current != NULL) {
+        Symbol *next = current->next;
+        free(current->name);
+        free(current);
+        current = next;
+    }
+    symbol_table = NULL;
 }
 
 /* AST Creation Functions */

@@ -185,6 +185,7 @@ const char *current_filename = NULL;
 // Symbol table functions
 void store_variable(const char *name, int value);
 int lookup(const char *name);
+void cleanup_symbol_table(void);
 int rune_to_number(const char *s);
 
 // AST functions
@@ -220,14 +221,14 @@ void free_ast(ASTNode *node);
 
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 typedef union YYSTYPE
-#line 89 "ᚠᚢᚦᛆᚱᚴ.y"
+#line 90 "ᚠᚢᚦᛆᚱᚴ.y"
 {
     int num;       // Integer values for numbers
     char *id;     // String values for identifiers
     struct ASTNode *ast;  // AST node pointers
 }
 /* Line 193 of yacc.c.  */
-#line 231 "ᚠᚢᚦᛆᚱᚴ.tab.c"
+#line 232 "ᚠᚢᚦᛆᚱᚴ.tab.c"
 	YYSTYPE;
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
 # define YYSTYPE_IS_DECLARED 1
@@ -240,7 +241,7 @@ typedef union YYSTYPE
 
 
 /* Line 216 of yacc.c.  */
-#line 244 "ᚠᚢᚦᛆᚱᚴ.tab.c"
+#line 245 "ᚠᚢᚦᛆᚱᚴ.tab.c"
 
 #ifdef short
 # undef short
@@ -534,9 +535,9 @@ static const yytype_int8 yyrhs[] =
 /* YYRLINE[YYN] -- source line where rule number YYN was defined.  */
 static const yytype_uint8 yyrline[] =
 {
-       0,   106,   106,   108,   120,   121,   122,   123,   124,   128,
-     134,   135,   136,   140,   141,   142,   146,   147,   148,   152,
-     153,   154,   155,   156,   157,   161,   164,   170,   176,   180
+       0,   107,   107,   109,   121,   122,   123,   124,   125,   129,
+     135,   136,   137,   141,   142,   143,   147,   148,   149,   153,
+     154,   155,   156,   157,   158,   162,   165,   171,   177,   181
 };
 #endif
 
@@ -1476,7 +1477,7 @@ yyreduce:
   switch (yyn)
     {
         case 3:
-#line 108 "ᚠᚢᚦᛆᚱᚴ.y"
+#line 109 "ᚠᚢᚦᛆᚱᚴ.y"
     {
         if ((yyvsp[(2) - (2)].ast)) {
             int result = evaluate_ast((yyvsp[(2) - (2)].ast));
@@ -1489,110 +1490,110 @@ yyreduce:
     break;
 
   case 9:
-#line 128 "ᚠᚢᚦᛆᚱᚴ.y"
+#line 129 "ᚠᚢᚦᛆᚱᚴ.y"
     {
         (yyval.ast) = create_assignment_node((yyvsp[(1) - (3)].id), (yyvsp[(3) - (3)].ast));
     ;}
     break;
 
   case 10:
-#line 134 "ᚠᚢᚦᛆᚱᚴ.y"
+#line 135 "ᚠᚢᚦᛆᚱᚴ.y"
     { (yyval.ast) = (yyvsp[(1) - (1)].ast); ;}
     break;
 
   case 11:
-#line 135 "ᚠᚢᚦᛆᚱᚴ.y"
+#line 136 "ᚠᚢᚦᛆᚱᚴ.y"
     { (yyval.ast) = create_binary_op_node('+', (yyvsp[(1) - (3)].ast), (yyvsp[(3) - (3)].ast)); ;}
     break;
 
   case 12:
-#line 136 "ᚠᚢᚦᛆᚱᚴ.y"
+#line 137 "ᚠᚢᚦᛆᚱᚴ.y"
     { (yyval.ast) = create_binary_op_node('-', (yyvsp[(1) - (3)].ast), (yyvsp[(3) - (3)].ast)); ;}
     break;
 
   case 13:
-#line 140 "ᚠᚢᚦᛆᚱᚴ.y"
+#line 141 "ᚠᚢᚦᛆᚱᚴ.y"
     { (yyval.ast) = (yyvsp[(1) - (1)].ast); ;}
     break;
 
   case 14:
-#line 141 "ᚠᚢᚦᛆᚱᚴ.y"
+#line 142 "ᚠᚢᚦᛆᚱᚴ.y"
     { (yyval.ast) = create_binary_op_node('*', (yyvsp[(1) - (3)].ast), (yyvsp[(3) - (3)].ast)); ;}
     break;
 
   case 15:
-#line 142 "ᚠᚢᚦᛆᚱᚴ.y"
+#line 143 "ᚠᚢᚦᛆᚱᚴ.y"
     { (yyval.ast) = create_binary_op_node('/', (yyvsp[(1) - (3)].ast), (yyvsp[(3) - (3)].ast)); ;}
     break;
 
   case 16:
-#line 146 "ᚠᚢᚦᛆᚱᚴ.y"
+#line 147 "ᚠᚢᚦᛆᚱᚴ.y"
     { (yyval.ast) = create_identifier_node((yyvsp[(1) - (1)].id)); ;}
     break;
 
   case 17:
-#line 147 "ᚠᚢᚦᛆᚱᚴ.y"
+#line 148 "ᚠᚢᚦᛆᚱᚴ.y"
     { (yyval.ast) = create_number_node((yyvsp[(1) - (1)].num)); ;}
     break;
 
   case 18:
-#line 148 "ᚠᚢᚦᛆᚱᚴ.y"
+#line 149 "ᚠᚢᚦᛆᚱᚴ.y"
     { (yyval.ast) = (yyvsp[(2) - (3)].ast); ;}
     break;
 
   case 19:
-#line 152 "ᚠᚢᚦᛆᚱᚴ.y"
+#line 153 "ᚠᚢᚦᛆᚱᚴ.y"
     { (yyval.ast) = create_binary_op_node('=', (yyvsp[(1) - (3)].ast), (yyvsp[(3) - (3)].ast)); ;}
     break;
 
   case 20:
-#line 153 "ᚠᚢᚦᛆᚱᚴ.y"
+#line 154 "ᚠᚢᚦᛆᚱᚴ.y"
     { (yyval.ast) = create_binary_op_node('!', (yyvsp[(1) - (3)].ast), (yyvsp[(3) - (3)].ast)); ;}
     break;
 
   case 21:
-#line 154 "ᚠᚢᚦᛆᚱᚴ.y"
+#line 155 "ᚠᚢᚦᛆᚱᚴ.y"
     { (yyval.ast) = create_binary_op_node('>', (yyvsp[(1) - (3)].ast), (yyvsp[(3) - (3)].ast)); ;}
     break;
 
   case 22:
-#line 155 "ᚠᚢᚦᛆᚱᚴ.y"
+#line 156 "ᚠᚢᚦᛆᚱᚴ.y"
     { (yyval.ast) = create_binary_op_node('<', (yyvsp[(1) - (3)].ast), (yyvsp[(3) - (3)].ast)); ;}
     break;
 
   case 23:
-#line 156 "ᚠᚢᚦᛆᚱᚴ.y"
+#line 157 "ᚠᚢᚦᛆᚱᚴ.y"
     { (yyval.ast) = create_binary_op_node('G', (yyvsp[(1) - (3)].ast), (yyvsp[(3) - (3)].ast)); ;}
     break;
 
   case 24:
-#line 157 "ᚠᚢᚦᛆᚱᚴ.y"
+#line 158 "ᚠᚢᚦᛆᚱᚴ.y"
     { (yyval.ast) = create_binary_op_node('L', (yyvsp[(1) - (3)].ast), (yyvsp[(3) - (3)].ast)); ;}
     break;
 
   case 25:
-#line 161 "ᚠᚢᚦᛆᚱᚴ.y"
+#line 162 "ᚠᚢᚦᛆᚱᚴ.y"
     {
         (yyval.ast) = create_if_node((yyvsp[(2) - (4)].ast), (yyvsp[(3) - (4)].ast), NULL);
     ;}
     break;
 
   case 26:
-#line 164 "ᚠᚢᚦᛆᚱᚴ.y"
+#line 165 "ᚠᚢᚦᛆᚱᚴ.y"
     {
         (yyval.ast) = create_if_node((yyvsp[(2) - (6)].ast), (yyvsp[(3) - (6)].ast), (yyvsp[(5) - (6)].ast));
     ;}
     break;
 
   case 27:
-#line 170 "ᚠᚢᚦᛆᚱᚴ.y"
+#line 171 "ᚠᚢᚦᛆᚱᚴ.y"
     {
         (yyval.ast) = create_while_node((yyvsp[(2) - (4)].ast), (yyvsp[(3) - (4)].ast));
     ;}
     break;
 
   case 28:
-#line 176 "ᚠᚢᚦᛆᚱᚴ.y"
+#line 177 "ᚠᚢᚦᛆᚱᚴ.y"
     {
         (yyval.ast) = create_block_node();
         block_add_statement((yyval.ast), (yyvsp[(1) - (1)].ast));
@@ -1600,7 +1601,7 @@ yyreduce:
     break;
 
   case 29:
-#line 180 "ᚠᚢᚦᛆᚱᚴ.y"
+#line 181 "ᚠᚢᚦᛆᚱᚴ.y"
     {
         block_add_statement((yyvsp[(1) - (2)].ast), (yyvsp[(2) - (2)].ast));
         (yyval.ast) = (yyvsp[(1) - (2)].ast);
@@ -1609,7 +1610,7 @@ yyreduce:
 
 
 /* Line 1267 of yacc.c.  */
-#line 1613 "ᚠᚢᚦᛆᚱᚴ.tab.c"
+#line 1614 "ᚠᚢᚦᛆᚱᚴ.tab.c"
       default: break;
     }
   YY_SYMBOL_PRINT ("-> $$ =", yyr1[yyn], &yyval, &yyloc);
@@ -1823,7 +1824,7 @@ yyreturn:
 }
 
 
-#line 186 "ᚠᚢᚦᛆᚱᚴ.y"
+#line 187 "ᚠᚢᚦᛆᚱᚴ.y"
 
 
 // External flex variable for input file
@@ -1852,6 +1853,9 @@ int main(int argc, char **argv) {
     if (input_file != NULL) {
         fclose(input_file);
     }
+
+    // Clean up symbol table before exit
+    cleanup_symbol_table();
 
     return result;
 }
@@ -1934,6 +1938,18 @@ int lookup(const char *name) {
     fprintf(stderr, "'\n");
 
     return 0; // Return 0 for undefined variables
+}
+
+/* Clean up symbol table and free all memory */
+void cleanup_symbol_table(void) {
+    Symbol *current = symbol_table;
+    while (current != NULL) {
+        Symbol *next = current->next;
+        free(current->name);
+        free(current);
+        current = next;
+    }
+    symbol_table = NULL;
 }
 
 /* AST Creation Functions */

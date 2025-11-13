@@ -12,7 +12,8 @@
       "Bash(./run_tests.sh:*)",
       "Bash(test_invalid_utf8_number.ᚠᚢᚦᛆᚱᚴ)",
       "Bash(test_truncated_utf8.ᚠᚢᚦᛆᚱᚴ)",
-      "Bash(test_overlong_utf8.ᚠᚢᚦᛆᚱᚴ)"
+      "Bash(test_overlong_utf8.ᚠᚢᚦᛆᚱᚴ)",
+      "Bash(leaks futhark:*)"
     ],
     "deny": [],
     "ask": []
