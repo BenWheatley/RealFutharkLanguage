@@ -90,6 +90,22 @@ run_test "syntax error" "error_test2.ᚠᚢᚦᛆᚱᚴ" "syntax error" "fail"
 run_test "division by zero" "error_test3.ᚠᚢᚦᛆᚱᚴ" "Division by zero"
 
 echo ""
+echo "--- UTF-8 Validation Tests ---"
+# Note: invalid UTF-8 bytes are skipped by lexer, producing garbled but non-crashing output
+# Just verify it doesn't crash (exit code 0)
+if ./futhark test_invalid_utf8_id.ᚠᚢᚦᛆᚱᚴ >/dev/null 2>&1; then
+    echo -e "Testing invalid UTF-8 in identifier... ${GREEN}PASS${NC} (gracefully handled)"
+    PASSED=$((PASSED + 1))
+else
+    echo -e "Testing invalid UTF-8 in identifier... ${RED}FAIL${NC} (crashed)"
+    FAILED=$((FAILED + 1))
+fi
+TOTAL=$((TOTAL + 1))
+run_test "invalid UTF-8 in number" "test_invalid_utf8_number.ᚠᚢᚦᛆᚱᚴ" "Undefined variable"
+run_test "truncated UTF-8 sequence" "test_truncated_utf8.ᚠᚢᚦᛆᚱᚴ" "Result: 5"
+run_test "overlong UTF-8 encoding" "test_overlong_utf8.ᚠᚢᚦᛆᚱᚴ" "Undefined variable"
+
+echo ""
 echo "==================================="
 echo "Test Results:"
 echo "  Passed: $PASSED"
