@@ -2,9 +2,9 @@
 
 https://github.com/user-attachments/assets/5f1ccf7e-b3cc-4eac-9754-3a8759a5adb0
 
- ᚦᛆᛐ᛭ᛂᚱ᛭ᛂᛁᚿᚢᚶᛁᛋ᛭ᚴᛆᛚᛚᛆᚧ᛭ᚠᚢᚦᛆᚱᚴ᛭ᛂᚠ᛭ᚦᛆᚧ᛭ᛂᚱ᛭ᚵᛆᛚᛑᚱᛆᚱ᛭ᛋᛂᛘ᛭ᛂᚱᚢ᛭ᚠᛚᚢᛐᛐᛁᚱ᛭ᛆᚠ᛭ᚡᚴᛁᚶᚢᛘ᛭ᛂᚿ᛭ᛂᚠ᛭ᛂᛁᚵᛁ᛭ᚦ᛭ᛂᚱ᛭ᚦᛆᛐ᛭ᚵᛚᛁᛐᚱᛆᚿᛑᛁ᛭ᚠᛁᛚᚱᛅᛐᛐ᛭ᚼᛐᛐ᛭ᛋᛐᛁᚵ᛭ᚠᚿᚴᛋᛁᚿᛆᛚ᛭ᚵᚵᚿ᛭ᛋᛆᛘᚼᛚᛁᚧᛆ᛭ᚱᛆᚧᚦᛚᚢᛐᚢᚿᛆᚱᛐᚢᚶᚢᛘᛚ
+ ᚦᚨᚦ᛭ᛖᚱ᛭ᚨᚦᛖᛁᚾᛊ᛭ᚨᛚᚹᛟᚱᚢ᛭ᚠᚢᛏᚨᚱᚲ᛭ᛖᚠ᛭ᚦᚨᚦ᛭ᛖᚱ᛭ᚺᛟᚷᚷᚹᛁᚦ᛭ᛁ᛭ᛒᛖᚱᚷ᛭ᚨᚠ᛭ᚹᛁᚲᛁᛜᚢᛗ᛭ᚨᚾᚾᚨᚱᛊ᛭ᛖᚱ᛭ᚦᚨᚦ᛭ᛒᚨᚱᚨ᛭ᚷᛚᛁᛏᚱᚨᚾᛞᛁ᛭ᚠᛃᛟᛚᛏᚹᛁᛜᛏ᛭ᚺᚨᛏᛏᛊᛖᛏᛏ᛭ᚺᚨᚷᚾᚹᛁᛏᛏ᛭ᚷᚨᚷᚾᚨᛊᚨᛗᛊᛁᚦᚨ᛭ᚱᚨᚦᚷᚱᛖᛁᚾᛁᛜᚨᚱᛗᚨᛚ
 
-(Þat er einungis kallað "futhark" ef það er galdrar sem eru fluttir af víkingum, en ef eigi, þá er þat glitrandi fjölrætt, hátt stig, fúnksjónal, gögn samhliða, raðúthlutunartungumál).
+(Það er aðeins „alvöru fútark“ ef það er höggvið í berg af víkingum, annars er það bara glitrandi fjöltyngt, háttsett, hagnýtt, gagna-samsíða, raðgreiningarmál).
 
 (It's only "Real Futhark" if it is hewn into rock by Vikings, otherwise it's just a sparkling polyglot, high-level, functional, data-parallel, serialization language.).
 
