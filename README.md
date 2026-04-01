@@ -1,5 +1,7 @@
 # RealFutharkLanguage
 
+https://github.com/user-attachments/assets/5f1ccf7e-b3cc-4eac-9754-3a8759a5adb0
+
  ᚦᛆᛐ᛭ᛂᚱ᛭ᛂᛁᚿᚢᚶᛁᛋ᛭ᚴᛆᛚᛚᛆᚧ᛭ᚠᚢᚦᛆᚱᚴ᛭ᛂᚠ᛭ᚦᛆᚧ᛭ᛂᚱ᛭ᚵᛆᛚᛑᚱᛆᚱ᛭ᛋᛂᛘ᛭ᛂᚱᚢ᛭ᚠᛚᚢᛐᛐᛁᚱ᛭ᛆᚠ᛭ᚡᚴᛁᚶᚢᛘ᛭ᛂᚿ᛭ᛂᚠ᛭ᛂᛁᚵᛁ᛭ᚦ᛭ᛂᚱ᛭ᚦᛆᛐ᛭ᚵᛚᛁᛐᚱᛆᚿᛑᛁ᛭ᚠᛁᛚᚱᛅᛐᛐ᛭ᚼᛐᛐ᛭ᛋᛐᛁᚵ᛭ᚠᚿᚴᛋᛁᚿᛆᛚ᛭ᚵᚵᚿ᛭ᛋᛆᛘᚼᛚᛁᚧᛆ᛭ᚱᛆᚧᚦᛚᚢᛐᚢᚿᛆᚱᛐᚢᚶᚢᛘᛚ
 
 (Þat er einungis kallað "futhark" ef það er galdrar sem eru fluttir af víkingum, en ef eigi, þá er þat glitrandi fjölrætt, hátt stig, fúnksjónal, gögn samhliða, raðúthlutunartungumál).
@@ -10,6 +12,8 @@ A programming language written entirely in Futhark runes. Obviously an April Foo
 
 ## Features
 
+https://github.com/user-attachments/assets/a5dc235f-da23-4177-acd1-a684a9cf694c
+
 - Variables and assignments
 - Arithmetic operations (+, -, *, /)
 - Comparison operators (==, !=, >, <, >=, <=)
@@ -19,6 +23,8 @@ A programming language written entirely in Futhark runes. Obviously an April Foo
 - Error reporting with line numbers
 
 ## Building
+
+https://github.com/user-attachments/assets/a6377c4a-0963-4b1f-ae1c-b3133cbfa446
 
 ```bash
 make
