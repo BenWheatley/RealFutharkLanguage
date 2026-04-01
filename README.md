@@ -12,8 +12,6 @@ A programming language written entirely in Futhark runes. Obviously an April Foo
 
 ## Features
 
-https://github.com/user-attachments/assets/a5dc235f-da23-4177-acd1-a684a9cf694c
-
 - Variables and assignments
 - Arithmetic operations (+, -, *, /)
 - Comparison operators (==, !=, >, <, >=, <=)
@@ -278,6 +276,4 @@ Full Futhark rune range: U+16A0–U+16F8
 
 This is an April Fool's joke project that became real. Use it however you like.
 
-## Credits
-
-Built as a functioning interpreter for a runic programming language using the Futhark alphabet (ᚠᚢᚦᚨᚱᚴ).
+https://github.com/user-attachments/assets/a5dc235f-da23-4177-acd1-a684a9cf694c
