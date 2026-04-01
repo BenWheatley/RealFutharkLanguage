@@ -6,7 +6,7 @@ https://github.com/user-attachments/assets/5f1ccf7e-b3cc-4eac-9754-3a8759a5adb0
 
 (Þat er einungis kallað "futhark" ef það er galdrar sem eru fluttir af víkingum, en ef eigi, þá er þat glitrandi fjölrætt, hátt stig, fúnksjónal, gögn samhliða, raðúthlutunartungumál).
 
-(It's only called "futhark" if it's a spell cast by Vikings, but if not, it's a sparkling polyglot, high-level, functional, data-parallel, serialization language).
+(It's only "Real Futhark" if it is hewn into rock by Vikings, otherwise it's just a sparkling polyglot, high-level, functional, data-parallel, serialization language.).
 
 A programming language written entirely in Futhark runes. Obviously an April Fool's joke, but it also works because that's the world we live in now.
 
